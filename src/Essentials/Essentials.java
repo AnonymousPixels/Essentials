@@ -14,10 +14,11 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * This 'Toolkit'-class contains some quite useful voids.
+ * This 'Essentials'-class contains some quite useful voids.
  * 
- * @author BeutterFx
+ * @author Felix Beutter
  * @version 0.1.0-1
+ * version: major version number.minor version number.bug fixes-build number
  */
 public class Essentials {
 
