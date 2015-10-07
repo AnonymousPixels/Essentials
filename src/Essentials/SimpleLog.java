@@ -1,7 +1,7 @@
 /**
  * 
  */
-package log;
+package Essentials;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -35,14 +35,12 @@ public class SimpleLog {
 	 *            initialized
 	 * @throws IOException
 	 */
-	public SimpleLog(File file, boolean useSameFile, boolean useTimestamp,
-			String startText) throws IOException {
+	public SimpleLog(File file, boolean useSameFile, boolean useTimestamp, String startText) throws IOException {
 		df = new SimpleDateFormat("dd.MM.yyyy_hh:mm:ss");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 		SimpleLog.useTimestamp = useTimestamp;
 		if (!useSameFile) {
-			SimpleLog.file = new File(file.getPath() + "_" + df.format(time)
-					+ ".txt");
+			SimpleLog.file = new File(file.getPath() + "_" + df.format(time) + ".txt");
 		} else {
 			SimpleLog.file = file;
 		}
