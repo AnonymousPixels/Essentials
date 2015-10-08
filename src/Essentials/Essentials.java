@@ -1,4 +1,4 @@
-package Essentials;
+package essentials;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -7,7 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -52,8 +51,9 @@ public class Essentials {
 	 *            component
 	 * @return boolean if false, exception occurred
 	 */
-	public static boolean addComponent(Container container, GridBagLayout layout, Component component, int x, int y,
-			int width, int height, double weightx, double weighty, Insets insets) {
+	public static boolean addComponent(Container container,
+			GridBagLayout layout, Component component, int x, int y, int width,
+			int height, double weightx, double weighty, Insets insets) {
 
 		try {
 
@@ -114,7 +114,8 @@ public class Essentials {
 
 		try {
 
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+					"dd.MM.yyyy hh:mm:ss");
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
 			if (!file.exists())
@@ -123,7 +124,8 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 
 			if (printTimestamp)
-				fileWriter.append((CharSequence) simpleDateFormat.format(timestamp) + " " + text + "\n");
+				fileWriter.append((CharSequence) simpleDateFormat
+						.format(timestamp) + " " + text + "\n");
 			else
 				fileWriter.append(text + "\n");
 
@@ -155,7 +157,8 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 			fileWriter.append(text + "\n");
 			fileWriter.close();
-			System.out.println("Wrote '" + text + "' into '" + file.getPath() + "'");
+			System.out.println("Wrote '" + text + "' into '" + file.getPath()
+					+ "'");
 		} catch (IOException e) {
 			return false;
 		}
