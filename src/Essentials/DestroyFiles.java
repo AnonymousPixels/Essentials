@@ -15,6 +15,9 @@ import java.nio.channels.FileChannel;
 import java.util.Random;
 
 /**
+ * 
+ * Various ways of safely deleting files.
+ * 
  * @author Maximilian
  *
  */
@@ -30,8 +33,8 @@ public class DestroyFiles {
 
 	/**
 	 * Will overwrite the file with random bytes. .wipe() is probably better and
-	 * more efficent, but I'm not sure if it works.
-	 * 
+	 * more efficient, but I'm not sure if it works. Takes 23 seconds for one
+	 * iteration over a 50MB file.
 	 * 
 	 * @param times
 	 *            Number of iterations
@@ -60,7 +63,8 @@ public class DestroyFiles {
 
 	/**
 	 * Will overwrite the file with random bytes. Is probably better then
-	 * .shred, but .shred works for sure, this doesn't.
+	 * .shred, but .shred works for sure, this doesn't. Takes 23 seconds for one
+	 * iteration over a 50MB file.
 	 * 
 	 * @param times
 	 *            Number of iterations
@@ -91,12 +95,13 @@ public class DestroyFiles {
 	}
 
 	/**
-	 * Will change random bytes to random values.
+	 * Will change random bytes to random values. Really slow! Takes 20 minutes
+	 * for one iteration over a 50MB file.
 	 * 
 	 * @param howLong
 	 *            How long the file should burn. 1 will burn approximately half
 	 *            the file.
-	 * @return
+	 * 
 	 */
 	public boolean burn(float howLong) {
 		try {
@@ -117,6 +122,9 @@ public class DestroyFiles {
 
 	}
 
+	/**
+	 * Deletes a file in the normal way. Insecure! Use secureDelete()!
+	 */
 	public void delete() {
 
 		file.delete();
@@ -124,11 +132,12 @@ public class DestroyFiles {
 	}
 
 	/**
-	 * Overwrite the file with a given byte
+	 * Overwrite the file with a given byte Takes 13 seconds for one iteration
+	 * over a 50MB file.
 	 * 
 	 * @param data
 	 *            The data to write in the file
-	 * @return
+	 * 
 	 */
 	public boolean overwriteWith(byte data) {
 		long length = file.length();
@@ -151,31 +160,21 @@ public class DestroyFiles {
 
 	}
 
+	/**
+	 * Deletes Files safely, by overwriting them multiple times in different
+	 * ways. Takes 800ms per MB
+	 * 
+	 * 
+	 */
 	public boolean secureDelete() {
 
 		byte[] b = new byte[1];
 		rand.nextBytes(b);
-
-		long time = System.currentTimeMillis();
 		shred(1);
-		System.out.println(System.currentTimeMillis() - time);
-		time = System.currentTimeMillis();
 		overwriteWith(b[0]);
-		System.out.println(System.currentTimeMillis() - time);
-		time = System.currentTimeMillis();
 		wipe(1);
-		System.out.println(System.currentTimeMillis() - time);
-		time = System.currentTimeMillis();
-		burn(1);
-		System.out.println(System.currentTimeMillis() - time);
-		time = System.currentTimeMillis();
-
+		delete();
 		return true;
-
-	}
-
-	public static void main(String[] args) throws IOException {
-		new DestroyFiles(new File("E://file8.txt")).secureDelete();
 
 	}
 
