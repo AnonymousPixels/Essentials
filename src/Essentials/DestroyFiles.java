@@ -125,9 +125,19 @@ public class DestroyFiles {
 	/**
 	 * Deletes a file in the normal way. Insecure! Use secureDelete()!
 	 */
-	public void delete() {
+	public boolean delete() {
 
-		file.delete();
+		boolean worked = true;
+
+		if (file.isDirectory()) {
+			for (File c : file.listFiles())
+				if (!new DestroyFiles(c).delete())
+					worked = false;
+		}
+
+		if (!delete())
+			worked = false;
+		return worked;
 
 	}
 
@@ -161,21 +171,31 @@ public class DestroyFiles {
 	}
 
 	/**
-	 * Deletes Files safely, by overwriting them multiple times in different
-	 * ways. Takes 800ms per MB
-	 * 
+	 * Deletes files or directories safely, by overwriting them multiple times
+	 * in different ways. Takes 800ms per MB
 	 * 
 	 */
 	public boolean secureDelete() {
 
-		byte[] b = new byte[1];
-		rand.nextBytes(b);
-		shred(1);
-		overwriteWith(b[0]);
-		wipe(1);
-		delete();
-		return true;
+		boolean worked = true;
+
+		if (file.isDirectory()) {
+			for (File c : file.listFiles())
+				if (!new DestroyFiles(c).secureDelete())
+					worked = false;
+		} else {
+			byte[] b = new byte[1];
+			rand.nextBytes(b);
+			if (!shred(1))
+				worked = false;
+			if (!overwriteWith(b[0]))
+				worked = false;
+			if (!wipe(1))
+				worked = false;
+		}
+		if (!delete())
+			worked = false;
+		return worked;
 
 	}
-
 }
