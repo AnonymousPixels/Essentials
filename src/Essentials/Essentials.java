@@ -5,21 +5,32 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * This 'Essentials'-class contains some quite useful voids.
  * 
  * @author Felix Beutter
- * @version 0.2.1-8 version: major version number.minor version number.bug
+ * @author Maximilian von Gaisberg
+ * @version 0.3.1-8 version: major version number.minor version number.bug
  *          fixes-build number
  */
 public class Essentials {
@@ -198,4 +209,101 @@ public class Essentials {
 		reader.close();
 		return i;
 	}
+
+	/**
+	 * A method to put files in an uncompressed zip folder
+	 * 
+	 * @param zipFile
+	 *            The target zip-folder
+	 * @param containingFiles
+	 *            The files to put in the zip-folder
+	 * @throws IOException
+	 */
+	public static boolean zip(File zipFile, File[] containingFiles)
+			throws IOException {
+
+		if (zipFile.exists()) {
+			System.err.println("Zip file already exists, please try another");
+			return false;
+		}
+		FileOutputStream fos = new FileOutputStream(zipFile);
+		ZipOutputStream zos = new ZipOutputStream(fos);
+		int bytesRead;
+		byte[] buffer = new byte[1024];
+		CRC32 crc = new CRC32();
+		for (int i = 0, n = containingFiles.length; i < n; i++) {
+			File file = containingFiles[i];
+			if (!file.exists()) {
+				zos.close();
+				throw new FileNotFoundException("Couldn't find file "
+						+ file.getAbsolutePath());
+			}
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream(file));
+			crc.reset();
+			while ((bytesRead = bis.read(buffer)) != -1) {
+				crc.update(buffer, 0, bytesRead);
+			}
+			bis.close();
+			bis = new BufferedInputStream(new FileInputStream(file));
+			ZipEntry entry = new ZipEntry(file.getName());
+			entry.setMethod(ZipEntry.STORED);
+			entry.setCompressedSize(file.length());
+			entry.setSize(file.length());
+			entry.setCrc(crc.getValue());
+			zos.putNextEntry(entry);
+			while ((bytesRead = bis.read(buffer)) != -1) {
+				zos.write(buffer, 0, bytesRead);
+			}
+			bis.close();
+		}
+		zos.close();
+		return true;
+	}
+
+	/**
+	 * A method to send HTTP request to Webservers and fetch the answer
+	 * 
+	 * @param url
+	 *            The URL you want to send a request to
+	 * @return The answer from that URL
+	 * @throws IOException
+	 */
+	public static String sendHTTPRequest(URL url) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				url.openStream()));
+		String answer = "";
+		String line = "";
+		while (null != (line = br.readLine())) {
+			answer = answer + line + "\n";
+		}
+		return answer;
+	}
+
+	/**
+	 * Put files in a zip-folder and compress them
+	 * 
+	 * @param files
+	 *            The files to put into the zip-file
+	 * @param target
+	 *            The path of the target zip-file
+	 * @throws IOException
+	 */
+	public static void zipAndCompress(String target, String[] files)
+			throws IOException {
+		byte b[] = new byte[512];
+		ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(target));
+		for (int i = 0; i < files.length; i++) {
+			InputStream in = new FileInputStream(files[i]);
+			ZipEntry e = new ZipEntry(new File(files[i]).getName());
+			zout.putNextEntry(e);
+			int len = 0;
+			while ((len = in.read(b)) != -1) {
+				zout.write(b, 0, len);
+			}
+			zout.closeEntry();
+		}
+		zout.close();
+	}
+
 }
