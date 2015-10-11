@@ -1,4 +1,4 @@
-package Essentials;
+package essentials;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,6 +17,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -62,8 +65,9 @@ public class Essentials {
 	 *            component
 	 * @return boolean if false, exception occurred
 	 */
-	public static boolean addComponent(Container container, GridBagLayout layout, Component component, int x, int y,
-			int width, int height, double weightx, double weighty, Insets insets) {
+	public static boolean addComponent(Container container,
+			GridBagLayout layout, Component component, int x, int y, int width,
+			int height, double weightx, double weighty, Insets insets) {
 
 		try {
 
@@ -124,7 +128,8 @@ public class Essentials {
 
 		try {
 
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+					"dd.MM.yyyy hh:mm:ss");
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
 			if (!file.exists())
@@ -133,7 +138,8 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 
 			if (printTimestamp)
-				fileWriter.append((CharSequence) simpleDateFormat.format(timestamp) + " " + text + "\n");
+				fileWriter.append((CharSequence) simpleDateFormat
+						.format(timestamp) + " " + text + "\n");
 			else
 				fileWriter.append(text + "\n");
 
@@ -165,7 +171,8 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 			fileWriter.append(text + "\n");
 			fileWriter.close();
-			System.out.println("Wrote '" + text + "' into '" + file.getPath() + "'");
+			System.out.println("Wrote '" + text + "' into '" + file.getPath()
+					+ "'");
 		} catch (IOException e) {
 			return false;
 		}
@@ -278,6 +285,40 @@ public class Essentials {
 			answer = answer + line + "\n";
 		}
 		return answer;
+	}
+
+	/**
+	 * Download a file from a url and save it on the computer
+	 * 
+	 * @param url
+	 *            The URL of the file
+	 * @param saveFile
+	 *            The path where the file should be saved
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public static boolean downloadFileFromURL(URL url, File saveFile)
+			throws IOException, FileNotFoundException {
+
+		HttpURLConnection c;
+
+		c = (HttpURLConnection) url.openConnection();
+
+		c.connect();
+
+		BufferedInputStream in = new BufferedInputStream(c.getInputStream());
+
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(
+				saveFile));
+		byte[] buf = new byte[256];
+		int n = 0;
+		while ((n = in.read(buf)) >= 0) {
+			out.write(buf, 0, n);
+		}
+		out.flush();
+		out.close();
+
+		return true;
 	}
 
 	/**
