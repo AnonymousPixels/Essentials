@@ -6,6 +6,8 @@ package essentials;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
@@ -73,6 +75,32 @@ public class SimpleLog {
 			System.out.println(s);
 
 		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+
+		}
+		return true;
+	}
+
+	public boolean logStackTrace(Exception e) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		try {
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+
+			FileWriter out = new FileWriter(file, true);
+			if (useTimestamp) {
+				out.append((CharSequence) df.format(time) + " ");
+				System.out.println(df.format(time) + "  ");
+			}
+			String s = sw.toString();
+			out.append(s + "\n\r");
+			out.close();
+			System.err.println(s);
+
+		} catch (IOException f) {
+			f.printStackTrace();
 			return false;
 		}
 		return true;
