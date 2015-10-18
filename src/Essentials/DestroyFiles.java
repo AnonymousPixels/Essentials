@@ -126,19 +126,21 @@ public class DestroyFiles {
 	 * Deletes a file in the normal way. Insecure! Use secureDelete()!
 	 */
 	public boolean delete() {
-
-		boolean worked = true;
-
-		if (file.isDirectory()) {
-			for (File c : file.listFiles())
-				if (!new DestroyFiles(c).delete())
-					worked = false;
+		if (!file.exists()) {
+			return true;
 		}
 
-		if (!delete())
-			worked = false;
-		return worked;
+		if (!file.isDirectory())
+			return file.delete();
 
+		String[] list = file.list();
+		for (int i = 0; i < list.length; i++) {
+			if (!new DestroyFiles(new File(file.getPath() + File.separator
+					+ list[i])).delete())
+				return false;
+		}
+
+		return file.delete();
 	}
 
 	/**

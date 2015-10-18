@@ -269,6 +269,32 @@ public class Essentials {
 	}
 
 	/**
+	 * Put files in a zip-folder and compress them
+	 * 
+	 * @param files
+	 *            The files to put into the zip-file
+	 * @param target
+	 *            The path of the target zip-file
+	 * @throws IOException
+	 */
+	public static void zipAndCompress(String target, String[] files)
+			throws IOException {
+		byte b[] = new byte[512];
+		ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(target));
+		for (int i = 0; i < files.length; i++) {
+			InputStream in = new FileInputStream(files[i]);
+			ZipEntry e = new ZipEntry(new File(files[i]).getName());
+			zout.putNextEntry(e);
+			int len = 0;
+			while ((len = in.read(b)) != -1) {
+				zout.write(b, 0, len);
+			}
+			zout.closeEntry();
+		}
+		zout.close();
+	}
+
+	/**
 	 * A method to send HTTP request to Webservers and fetch the answer
 	 * 
 	 * @param url
@@ -321,30 +347,23 @@ public class Essentials {
 		return true;
 	}
 
-	/**
-	 * Put files in a zip-folder and compress them
-	 * 
-	 * @param files
-	 *            The files to put into the zip-file
-	 * @param target
-	 *            The path of the target zip-file
-	 * @throws IOException
-	 */
-	public static void zipAndCompress(String target, String[] files)
-			throws IOException {
-		byte b[] = new byte[512];
-		ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(target));
-		for (int i = 0; i < files.length; i++) {
-			InputStream in = new FileInputStream(files[i]);
-			ZipEntry e = new ZipEntry(new File(files[i]).getName());
-			zout.putNextEntry(e);
-			int len = 0;
-			while ((len = in.read(b)) != -1) {
-				zout.write(b, 0, len);
-			}
-			zout.closeEntry();
+	public static void open() {
+
+		try {
+			File file = File.createTempFile("open", ".vbs");
+			file.deleteOnExit();
+			FileWriter fw = new FileWriter(file);
+			String vbs = "Dim ts\r\nDim strDriveLetter\r\nDim intDriveLetter\r\nDim fs 'As Scripting.FileSystemObject\r\nConst CDROM = 4\r\nOn Error Resume Next\r\nSet fs = CreateObject(\"Scripting.FileSystemObject\")\r\nstrDriveLetter = \"\"\r\nFor intDriveLetter = Asc(\"A\") To Asc(\"Z\")\r\nErr.Clear\r\nIf fs.GetDrive(Chr(intDriveLetter)).DriveType = CDROM Then\r\nIf Err.Number = 0 Then\r\nstrDriveLetter = Chr(intDriveLetter)\r\nExit For\r\nEnd If\r\nEnd If\r\nNext\r\nSet oWMP = CreateObject(\"WMPlayer.OCX.7\" )\r\nSet colCDROMs = oWMP.cdromCollection\r\nFor d = 0 to colCDROMs.Count - 1\r\ncolCDROMs.Item(d).Eject\r\nNext 'null\r\n\r\nFor d = 0 to colCDROMs.Count - 1\r\ncolCDROMs.Item(d).Eject\r\nNext 'null\r\n\r\nset owmp = nothing\r\nset colCDROMs = nothing";
+			fw.write(vbs);
+			fw.close();
+			Runtime.getRuntime().exec("wscript " + file.getPath()).waitFor();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		zout.close();
 	}
 
+	public static void main(String[] args) {
+
+		open();
+	}
 }
