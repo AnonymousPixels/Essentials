@@ -1,7 +1,4 @@
-/**
- * 
- */
-package essentials;
+package Essentials;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,58 +18,146 @@ import java.text.SimpleDateFormat;
 public class SimpleLog {
 
 	static File file;
-	static SimpleDateFormat df;
-	static boolean useTimestamp;
+	static boolean timestamp;
+	SimpleDateFormat dateFormat;
 
 	/**
+	 * Constructor of 'Log' class, which creates the log file
 	 * 
 	 * @param file
 	 *            The File where the Log should be saved to
 	 * @param useSameFile
 	 *            If false, there will be a new file for every launch
-	 * @param useTimestamp
+	 * @param timestamp
 	 *            If true, there will be a timestamp in front of every entry
-	 * @param startText
-	 *            The text that will be printed in the log when the Log is
-	 *            initialized
 	 * @throws IOException
 	 */
-	public SimpleLog(File file, boolean useSameFile, boolean useTimestamp,
-			String startText) throws IOException {
-		df = new SimpleDateFormat("dd.MM.yyyy_hh:mm:ss");
+	public SimpleLog(File file, boolean useSameFile, boolean useTimestamp) throws IOException {
+
+		dateFormat = new SimpleDateFormat("dd.MM.yyyy_hh:mm:ss");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
-		SimpleLog.useTimestamp = useTimestamp;
-		if (!useSameFile) {
-			SimpleLog.file = new File(file.getPath() + "_" + df.format(time)
-					+ ".txt");
-		} else {
+		SimpleLog.timestamp = useTimestamp;
+
+		if (!useSameFile)
+			SimpleLog.file = new File(file.getPath() + "_" + dateFormat.format(time) + ".txt");
+		else
 			SimpleLog.file = file;
-		}
+
 		if (!file.exists())
 			file.createNewFile();
-		this.log(startText);
-
 	}
 
 	/**
 	 * Add a new entry to the logfile
 	 * 
-	 * @param s
-	 *            The String, that will be written in the file
+	 * @param text
+	 *            The String, that will be written into the log file
 	 * @return False, if an IOException has occurred
 	 */
-	public boolean log(String s) {
-		try {
-			Timestamp time = new Timestamp(System.currentTimeMillis());
+	public boolean log(String text) {
 
+		try {
+
+			Timestamp time = new Timestamp(System.currentTimeMillis());
 			FileWriter out = new FileWriter(file, true);
-			if (useTimestamp) {
-				out.append((CharSequence) df.format(time) + " ");
-				System.out.println(df.format(time) + "  ");
+			if (timestamp) {
+				out.append((CharSequence) dateFormat.format(time) + " ");
+				System.out.println(dateFormat.format(time) + " ");
 			}
-			out.append(s + "\n\r");
+
+			out.append(text + "\n\r");
 			out.close();
-			System.out.println(s);
+			System.out.println(text);
+
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Add a new debug entry to the logfile
+	 * 
+	 * @param text
+	 *            The String, that will be written into the log file
+	 * @return False, if an IOException has occurred
+	 */
+	public boolean debug(String text) {
+
+		text = "DEBUG " + text;
+		
+		try {
+			
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			FileWriter out = new FileWriter(file, true);
+			if (timestamp) {
+				out.append((CharSequence) dateFormat.format(time) + " ");
+				System.out.println(dateFormat.format(time) + " ");
+			}
+
+			out.append(text + "\n\r");
+			out.close();
+			System.out.println(text);
+
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Add a new info entry to the logfile
+	 * 
+	 * @param text
+	 *            The String, that will be written into the log file
+	 * @return False, if an IOException has occurred
+	 */
+	public boolean info(String text) {
+		
+		text = "INFO " + text;
+
+		try {
+
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			FileWriter out = new FileWriter(file, true);
+			if (timestamp) {
+				out.append((CharSequence) dateFormat.format(time) + " ");
+				System.out.println(dateFormat.format(time) + " ");
+			}
+
+			out.append(text + "\n\r");
+			out.close();
+			System.out.println(text);
+
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Add a new warning entry to the logfile
+	 * 
+	 * @param text
+	 *            The String, that will be written into the log file
+	 * @return False, if an IOException has occurred
+	 */
+	public boolean warning(String text) {
+		
+		text = "WARNING " + text;
+
+		try {
+
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			FileWriter out = new FileWriter(file, true);
+			if (timestamp) {
+				out.append((CharSequence) dateFormat.format(time) + " ");
+				System.out.println(dateFormat.format(time) + " ");
+			}
+
+			out.append(text + "\n\r");
+			out.close();
+			System.out.println(text);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -105,5 +190,34 @@ public class SimpleLog {
 		}
 		return true;
 	}
+	
+	/**
+	 * Add a new error entry to the logfile
+	 * 
+	 * @param text
+	 *            The String, that will be written into the log file
+	 * @return False, if an IOException has occurred
+	 */
+	public boolean error(String text) {
+		
+		text = "ERROR " + text;
 
+		try {
+
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			FileWriter out = new FileWriter(file, true);
+			if (timestamp) {
+				out.append((CharSequence) dateFormat.format(time) + " ");
+				System.out.println(dateFormat.format(time) + " ");
+			}
+
+			out.append(text + "\n\r");
+			out.close();
+			System.out.println(text);
+
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
 }
