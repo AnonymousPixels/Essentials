@@ -4,7 +4,7 @@
 /**
  * 
  */
-package essentials;
+package Essentials;
 
 import java.io.File;
 import java.io.FileOutputStream;
