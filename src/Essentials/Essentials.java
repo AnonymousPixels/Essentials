@@ -1,4 +1,4 @@
-package Essentials;
+package essentials;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -29,12 +29,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * This 'Essentials'-class contains some quite useful voids.
+ * This 'Essentials'-class contains some quite useful methods.
  * 
  * @author Felix Beutter
  * @author Maximilian von Gaisberg
- * @version 0.3.1-8 version: major version number.minor version number.bug
- *          fixes-build number
+ * @version 1.0.0
  */
 public class Essentials {
 
@@ -65,8 +64,9 @@ public class Essentials {
 	 *            component
 	 * @return boolean if false, exception occurred
 	 */
-	public static boolean addComponent(Container container, GridBagLayout layout, Component component, int x, int y,
-			int width, int height, double weightx, double weighty, Insets insets) {
+	public static boolean addComponent(Container container,
+			GridBagLayout layout, Component component, int x, int y, int width,
+			int height, double weightx, double weighty, Insets insets) {
 
 		try {
 
@@ -90,7 +90,7 @@ public class Essentials {
 
 	/**
 	 * The 'getHashMapObjects' method returns a Object[] which contains the keys
-	 * of the previously transfered HashMap.
+	 * of the given HashMap.
 	 * 
 	 * @param hashmap
 	 *            HashMap<String, Object> object
@@ -127,7 +127,8 @@ public class Essentials {
 
 		try {
 
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+					"dd.MM.yyyy hh:mm:ss");
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
 			if (!file.exists())
@@ -136,7 +137,8 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 
 			if (printTimestamp)
-				fileWriter.append((CharSequence) simpleDateFormat.format(timestamp) + " " + text + "\n");
+				fileWriter.append((CharSequence) simpleDateFormat
+						.format(timestamp) + " " + text + "\n");
 			else
 				fileWriter.append(text + "\n");
 
@@ -150,7 +152,7 @@ public class Essentials {
 	}
 
 	/**
-	 * The 'printStringToFile' method writes a string into a file.
+	 * The 'printStringToFile' method writes a String to the end of a file.
 	 * 
 	 * @param text
 	 *            The String, that will be written to the file
@@ -168,7 +170,8 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 			fileWriter.append(text + "\n");
 			fileWriter.close();
-			System.out.println("Wrote '" + text + "' into '" + file.getPath() + "'");
+			System.out.println("Wrote '" + text + "' into '" + file.getPath()
+					+ "'");
 		} catch (IOException e) {
 			return false;
 		}
@@ -177,27 +180,36 @@ public class Essentials {
 	}
 
 	/**
-	 * The 'findSubstring' method searches for a substing in string and returns
-	 * the index of the substring if found.
+	 * Reads a given file and returns the text
 	 * 
-	 * @param string
-	 *            The String, in where for the substring should be searched for
-	 * @param substring
-	 *            The String, which is sought after
-	 * @return index of found substring, if the returned value is -1, nothing
-	 *         was found
+	 * @param file
+	 *            The file you want to read
+	 * 
+	 * @return The content of the file
 	 */
-	public static int findSubstring(String string, String substring) {
+	public static String readFile(File file) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(
+				file.getAbsolutePath()));
+		StringBuilder sb = new StringBuilder();
+		try {
 
-		int i = -1;
-		if (string.contains(substring))
-			i = string.indexOf(substring);
-		return i;
+			String line = br.readLine();
+
+			while (line != null) {
+				sb.append(line);
+				sb.append("\n");
+				line = br.readLine();
+			}
+		} finally {
+			br.close();
+		}
+
+		return sb.toString();
+
 	}
 
 	/**
-	 * The 'countFileLines' method counts the number of lines of the transfered
-	 * file.
+	 * The 'countFileLines' method counts the number of lines of the given file.
 	 * 
 	 * @param file
 	 *            The file, which lines will be counted
@@ -205,16 +217,28 @@ public class Essentials {
 	 * @throws IOException
 	 */
 	public static int countFileLines(File file) throws IOException {
-		int i = 0;
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		while (reader.readLine() != null)
-			i++;
-		reader.close();
-		return i;
+		InputStream is = new BufferedInputStream(new FileInputStream(file));
+		try {
+			byte[] c = new byte[1024];
+			int count = 0;
+			int readChars = 0;
+			boolean empty = true;
+			while ((readChars = is.read(c)) != -1) {
+				empty = false;
+				for (int i = 0; i < readChars; ++i) {
+					if (c[i] == '\n') {
+						++count;
+					}
+				}
+			}
+			return (count == 0 && !empty) ? 1 : count;
+		} finally {
+			is.close();
+		}
 	}
 
 	/**
-	 * A method to put files in an uncompressed zip folder
+	 * Puts files in an uncompressed zip folder
 	 * 
 	 * @param zipFile
 	 *            The target zip-folder
@@ -222,7 +246,8 @@ public class Essentials {
 	 *            The files to put in the zip-folder
 	 * @throws IOException
 	 */
-	public static boolean zip(File zipFile, File[] containingFiles) throws IOException {
+	public static boolean zip(File zipFile, File[] containingFiles)
+			throws IOException {
 
 		if (zipFile.exists()) {
 			System.err.println("Zip file already exists, please try another");
@@ -237,9 +262,11 @@ public class Essentials {
 			File file = containingFiles[i];
 			if (!file.exists()) {
 				zos.close();
-				throw new FileNotFoundException("Couldn't find file " + file.getAbsolutePath());
+				throw new FileNotFoundException("Couldn't find file "
+						+ file.getAbsolutePath());
 			}
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream(file));
 			crc.reset();
 			while ((bytesRead = bis.read(buffer)) != -1) {
 				crc.update(buffer, 0, bytesRead);
@@ -262,7 +289,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Put files in a zip-folder and compress them
+	 * Puts files in a zip-folder and compresses them
 	 * 
 	 * @param files
 	 *            The files to put into the zip-file
@@ -283,12 +310,14 @@ public class Essentials {
 				zout.write(b, 0, len);
 			}
 			zout.closeEntry();
+			in.close();
 		}
 		zout.close();
+
 	}
 
 	/**
-	 * A method to send HTTP request to Webservers and fetch the answer
+	 * A method to send HTTP requests to a Webserver and fetch the answer
 	 * 
 	 * @param url
 	 *            The URL you want to send a request to
@@ -296,7 +325,8 @@ public class Essentials {
 	 * @throws IOException
 	 */
 	public static String sendHTTPRequest(URL url) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				url.openStream()));
 		String answer = "";
 		String line = "";
 		while (null != (line = br.readLine())) {
@@ -315,7 +345,8 @@ public class Essentials {
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	public static boolean downloadFileFromURL(URL url, File saveFile) throws IOException, FileNotFoundException {
+	public static boolean downloadFileFromURL(URL url, File saveFile)
+			throws IOException, FileNotFoundException {
 
 		HttpURLConnection c;
 
@@ -325,7 +356,8 @@ public class Essentials {
 
 		BufferedInputStream in = new BufferedInputStream(c.getInputStream());
 
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(saveFile));
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(
+				saveFile));
 		byte[] buf = new byte[256];
 		int n = 0;
 		while ((n = in.read(buf)) >= 0) {
@@ -337,8 +369,11 @@ public class Essentials {
 		return true;
 	}
 
-<<<<<<< HEAD
-	public static void open() {
+	/*
+	 * Opens all CD-Drives Will create a VBscript file in the temp folder and
+	 * runs it
+	 */
+	public static void openCDdrive() {
 
 		try {
 			File file = File.createTempFile("open", ".vbs");
@@ -350,34 +385,8 @@ public class Essentials {
 			Runtime.getRuntime().exec("wscript " + file.getPath()).waitFor();
 		} catch (Exception e) {
 			e.printStackTrace();
-=======
-	/**
-	 * Put files in a zip-folder and compress them
-	 * 
-	 * @param files
-	 *            The files to put into the zip-file
-	 * @param target
-	 *            The path of the target zip-file
-	 * @throws IOException
-	 */
-	public static void zipAndCompress(String target, String[] files) throws IOException {
-		byte b[] = new byte[512];
-		ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(target));
-		for (int i = 0; i < files.length; i++) {
-			InputStream in = new FileInputStream(files[i]);
-			ZipEntry e = new ZipEntry(new File(files[i]).getName());
-			zout.putNextEntry(e);
-			int len = 0;
-			while ((len = in.read(b)) != -1) {
-				zout.write(b, 0, len);
-			}
-			zout.closeEntry();
->>>>>>> origin/master
+
 		}
 	}
 
-	public static void main(String[] args) {
-
-		open();
-	}
 }
