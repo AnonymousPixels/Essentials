@@ -152,7 +152,11 @@ public class Essentials {
 	}
 
 	/**
+<<<<<<< HEAD
+	 * Writes a String to the end of a file.
+=======
 	 * The 'printStringToFile' method writes a String to the end of a file.
+>>>>>>> refs/remotes/origin/master
 	 * 
 	 * @param text
 	 *            The String, that will be written to the file
@@ -209,7 +213,11 @@ public class Essentials {
 	}
 
 	/**
+<<<<<<< HEAD
+	 * Counts the number of lines of the given file.
+=======
 	 * The 'countFileLines' method counts the number of lines of the given file.
+>>>>>>> refs/remotes/origin/master
 	 * 
 	 * @param file
 	 *            The file, which lines will be counted
@@ -317,7 +325,11 @@ public class Essentials {
 	}
 
 	/**
+<<<<<<< HEAD
+	 * Sends HTTP requests to a Webserver and fetch the answer
+=======
 	 * A method to send HTTP requests to a Webserver and fetch the answer
+>>>>>>> refs/remotes/origin/master
 	 * 
 	 * @param url
 	 *            The URL you want to send a request to
@@ -336,7 +348,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Download a file from a url and save it on the computer
+	 * Downloads a file from a url and save it on the computer
 	 * 
 	 * @param url
 	 *            The URL of the file
@@ -370,8 +382,13 @@ public class Essentials {
 	}
 
 	/*
+<<<<<<< HEAD
+	 * Opens all CD-Drives. Will create a VBscript file in the temp folder and
+	 * run it
+=======
 	 * Opens all CD-Drives Will create a VBscript file in the temp folder and
 	 * runs it
+>>>>>>> refs/remotes/origin/master
 	 */
 	public static void openCDdrive() {
 

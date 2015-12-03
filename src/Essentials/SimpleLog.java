@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
  * 
  * @version 1.0
  * @author Maximilian von Gaisberg
+ * @author Felix Beutter
  *
  */
 public class SimpleLog {

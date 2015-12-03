@@ -7,12 +7,22 @@
 package essentials;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * 
@@ -21,12 +31,12 @@ import java.util.Random;
  * @author Maximilian
  *
  */
-public class DestroyFiles {
+public class FileUtils {
 
 	File file;
 	Random rand;
 
-	public DestroyFiles(File f) {
+	public FileUtils(File f) {
 		file = f;
 		rand = new Random();
 	}
@@ -135,7 +145,7 @@ public class DestroyFiles {
 
 		String[] list = file.list();
 		for (int i = 0; i < list.length; i++) {
-			if (!new DestroyFiles(new File(file.getPath() + File.separator
+			if (!new FileUtils(new File(file.getPath() + File.separator
 					+ list[i])).delete())
 				return false;
 		}
@@ -176,6 +186,7 @@ public class DestroyFiles {
 	 * Deletes files or directories safely, by overwriting them multiple times
 	 * in different ways. Takes 800ms per MB
 	 * 
+	 * @return False if something went wrong
 	 */
 	public boolean secureDelete() {
 
@@ -183,7 +194,7 @@ public class DestroyFiles {
 
 		if (file.isDirectory()) {
 			for (File c : file.listFiles())
-				if (!new DestroyFiles(c).secureDelete())
+				if (!new FileUtils(c).secureDelete())
 					worked = false;
 		} else {
 			byte[] b = new byte[1];
@@ -198,6 +209,82 @@ public class DestroyFiles {
 		if (!delete())
 			worked = false;
 		return worked;
+
+	}
+
+	/**
+	 * Encrypts file with the AES-Algorithm
+	 * 
+	 * @param key
+	 *            A 128 bit (16 byte) key to encrypt the file
+	 * @param outputFile
+	 *            The path were the encrypted file should be saved
+	 * @return False if an Exception occurred
+	 */
+	public boolean encrypt(String key, File outputFile) {
+		try {
+			Key secretKey = new SecretKeySpec(key.getBytes(), "AES");
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+			FileInputStream inputStream = new FileInputStream(file);
+			byte[] inputBytes = new byte[(int) file.length()];
+			inputStream.read(inputBytes);
+
+			byte[] outputBytes = cipher.doFinal(inputBytes);
+
+			FileOutputStream outputStream = new FileOutputStream(outputFile);
+			outputStream.write(outputBytes);
+
+			inputStream.close();
+			outputStream.close();
+
+		} catch (NoSuchPaddingException | NoSuchAlgorithmException
+				| InvalidKeyException | BadPaddingException
+				| IllegalBlockSizeException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * Decrypts files with the AES-Algorithm
+	 * 
+	 * @param key
+	 *            A 128 bit (16 byte) key to decrypt the file
+	 * @param outputFile
+	 *            The path were the decrypted file should be saved
+	 * @return False if an Exception occurred
+	 */
+	public boolean decrypt(String key, File outputFile) {
+		try {
+			Key secretKey = new SecretKeySpec(key.getBytes(), "AES");
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+			FileInputStream inputStream = new FileInputStream(file);
+			byte[] inputBytes = new byte[(int) file.length()];
+			inputStream.read(inputBytes);
+
+			byte[] outputBytes = cipher.doFinal(inputBytes);
+
+			FileOutputStream outputStream = new FileOutputStream(outputFile);
+			outputStream.write(outputBytes);
+
+			inputStream.close();
+			outputStream.close();
+
+		} catch (NoSuchPaddingException | NoSuchAlgorithmException
+				| InvalidKeyException | BadPaddingException
+				| IllegalBlockSizeException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
 
 	}
 }
