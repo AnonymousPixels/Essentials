@@ -33,8 +33,7 @@ public class SimpleLog {
 	 *            If true, there will be a timestamp in front of every entry
 	 * @throws IOException
 	 */
-	public SimpleLog(File file, boolean useSameFile, boolean useTimestamp)
-			throws IOException {
+	public SimpleLog(File file, boolean useSameFile, boolean useTimestamp) {
 
 		dateFormat = new SimpleDateFormat("dd.MM.yyyy_hh:mm:ss");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -47,7 +46,12 @@ public class SimpleLog {
 			SimpleLog.file = file;
 
 		if (!file.exists())
-			file.createNewFile();
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				System.out.println("Couldn't log to file.");
+				e.printStackTrace();
+			}
 	}
 
 	/**
@@ -87,7 +91,7 @@ public class SimpleLog {
 	 */
 	public boolean debug(String text) {
 
-		text = "DEBUG " + text;
+		text = "DEBUG: " + text;
 
 		try {
 
@@ -117,7 +121,7 @@ public class SimpleLog {
 	 */
 	public boolean info(String text) {
 
-		text = "INFO " + text;
+		text = "INFO: " + text;
 
 		try {
 
@@ -147,7 +151,7 @@ public class SimpleLog {
 	 */
 	public boolean warning(String text) {
 
-		text = "WARNING " + text;
+		text = "WARNING: " + text;
 
 		try {
 
@@ -210,7 +214,30 @@ public class SimpleLog {
 	 */
 	public boolean error(String text) {
 
-		text = "ERROR " + text;
+		text = "ERROR: " + text;
+
+		try {
+
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			FileWriter out = new FileWriter(file, true);
+			if (timestamp) {
+				out.append((CharSequence) dateFormat.format(time) + " ");
+				System.out.println(dateFormat.format(time) + " ");
+			}
+
+			out.append(text + "\n\r");
+			out.close();
+			System.out.println(text);
+
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean fatal(String text) {
+
+		text = "FATAL ERROR: " + text;
 
 		try {
 

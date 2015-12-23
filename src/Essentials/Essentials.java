@@ -5,6 +5,9 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -152,11 +155,8 @@ public class Essentials {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Writes a String to the end of a file.
-=======
-	 * The 'printStringToFile' method writes a String to the end of a file.
->>>>>>> refs/remotes/origin/master
+	 * Writes a String to the end of a file. The 'printStringToFile' method
+	 * writes a String to the end of a file.
 	 * 
 	 * @param text
 	 *            The String, that will be written to the file
@@ -213,11 +213,8 @@ public class Essentials {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Counts the number of lines of the given file.
-=======
-	 * The 'countFileLines' method counts the number of lines of the given file.
->>>>>>> refs/remotes/origin/master
+	 * Counts the number of lines of the given file. The 'countFileLines' method
+	 * counts the number of lines of the given file.
 	 * 
 	 * @param file
 	 *            The file, which lines will be counted
@@ -325,11 +322,8 @@ public class Essentials {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Sends HTTP requests to a Webserver and fetch the answer
-=======
-	 * A method to send HTTP requests to a Webserver and fetch the answer
->>>>>>> refs/remotes/origin/master
+	 * Sends HTTP requests to a Webserver and fetch the answer A method to send
+	 * HTTP requests to a Webserver and fetch the answer
 	 * 
 	 * @param url
 	 *            The URL you want to send a request to
@@ -381,14 +375,10 @@ public class Essentials {
 		return true;
 	}
 
-	/*
-<<<<<<< HEAD
+	/**
 	 * Opens all CD-Drives. Will create a VBscript file in the temp folder and
-	 * run it
-=======
-	 * Opens all CD-Drives Will create a VBscript file in the temp folder and
-	 * runs it
->>>>>>> refs/remotes/origin/master
+	 * run it Opens all CD-Drives Will create a VBscript file in the temp folder
+	 * and runs it
 	 */
 	public static void openCDdrive() {
 
@@ -404,6 +394,21 @@ public class Essentials {
 			e.printStackTrace();
 
 		}
+	}
+
+	/**
+	 * Copies a BufferedImage.
+	 * 
+	 * @param image
+	 *            The image that should be copied
+	 * 
+	 * @returns The copied image
+	 */
+	public static BufferedImage copyBufferedImage(BufferedImage image) {
+		ColorModel cm = image.getColorModel();
+		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		WritableRaster raster = image.copyData(null);
+		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
 }
