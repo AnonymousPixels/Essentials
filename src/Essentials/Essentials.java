@@ -27,6 +27,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -409,6 +410,39 @@ public class Essentials {
 		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 		WritableRaster raster = image.copyData(null);
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+	}
+
+	/**
+	 * Search for all IPs in the local network unsing the arp -a command. ONly
+	 * works on Windows
+	 * 
+	 * @return An String array containing the IPs
+	 * @throws IOException
+	 */
+	public static String[] searchIPs() throws IOException {
+		String[] line = null;
+		String[] ips = null;
+		String answer = "";
+
+		Process p = Runtime.getRuntime().exec("arp -a");
+		InputStream is = p.getInputStream();
+		int c;
+		while ((c = is.read()) != -1) {
+			// System.out.print((char) c );
+			answer = answer + (char) c;
+		}
+
+		line = answer.split(Pattern.quote("\n"));
+		int length = line.length;
+		String[] line2 = new String[length];
+		ips = new String[line.length-3];
+		for (int i = 3; i < line.length; i++) {
+			line2[i - 2] = line[i];
+			ips[i - 3] = line[i].substring(0, 17).trim();
+
+		}
+		return ips;
+
 	}
 
 }
