@@ -7,22 +7,12 @@
 package essentials;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.Random;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 
 /**
  * 
@@ -52,21 +42,32 @@ public class FileUtils {
 	 */
 
 	public boolean shred(int times) {
-		long length = file.length();
-		byte[] content = new byte[(int) length];
-		FileOutputStream out;
-		for (int i = 0; i < times; i++) {
+		long totalBytes = file.length();
+		long shreddedBytes = 0;
+		int length = 0;
+		while (totalBytes > shreddedBytes) {
+			if ((totalBytes - shreddedBytes) <= (2 ^ 31)) {
+				length = (int) (totalBytes - shreddedBytes);
 
-			rand.nextBytes(content);
+			}
+			length = (2 ^ 31);
+			shreddedBytes += length;
+			byte[] content = new byte[(int) length];
+			FileOutputStream out;
+			for (int i = 0; i < times; i++) {
 
-			try {
-				out = new FileOutputStream(file);
-				out.write(content);
-				out.close();
-			} catch (IOException e) {
-				return false;
+				rand.nextBytes(content);
+
+				try {
+					out = new FileOutputStream(file);
+					out.write(content);
+					out.close();
+				} catch (IOException e) {
+					return false;
+				}
 			}
 		}
+
 		return true;
 
 	}
