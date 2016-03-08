@@ -7,6 +7,7 @@
 package essentials;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -213,4 +214,17 @@ public class FileUtils {
 
 	}
 
+	public boolean create(long length) throws IOException {
+
+		byte[] b = new byte[1];
+
+		FileOutputStream out = new FileOutputStream(file);
+		for (long i = 0; i < length; i++) {
+			out.write(b);
+		}
+		out.close();
+
+		return true;
+
+	}
 }
