@@ -85,7 +85,7 @@ public class Settings {
 		try {
 			settings.storeToXML(new FileOutputStream(this.file), null);
 		} catch (IOException e) {
-			log.fatal("IOException while saving settings" + e.getMessage());
+			log.fatal("IOException while saving"+ e.getMessage());
 			log.logStackTrace(e);
 			System.exit(1);
 		}
