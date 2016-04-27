@@ -72,7 +72,7 @@ public class SimpleLog {
 				System.out.println(dateFormat.format(time) + " ");
 			}
 
-			out.append(text + "\n\r");
+			out.append(text + "\n");
 			out.close();
 			System.out.println(text);
 
@@ -102,7 +102,7 @@ public class SimpleLog {
 				System.out.println(dateFormat.format(time) + " ");
 			}
 
-			out.append(text + "\n\r");
+			out.append(text + "\n");
 			out.close();
 			System.out.println(text);
 
@@ -132,7 +132,7 @@ public class SimpleLog {
 				System.out.println(dateFormat.format(time) + " ");
 			}
 
-			out.append(text + "\n\r");
+			out.append(text + "\n");
 			out.close();
 			System.out.println(text);
 
@@ -162,7 +162,7 @@ public class SimpleLog {
 				System.out.println(dateFormat.format(time) + " ");
 			}
 
-			out.append(text + "\n\r");
+			out.append(text + "\n");
 			out.close();
 			System.out.println(text);
 
@@ -194,7 +194,7 @@ public class SimpleLog {
 				System.out.println(dateFormat.format(time) + "  ");
 			}
 			String s = sw.toString();
-			out.append(s + "\n\r");
+			out.append(s + "\n");
 			out.close();
 			System.err.println(s);
 
@@ -225,7 +225,7 @@ public class SimpleLog {
 				System.out.println(dateFormat.format(time) + " ");
 			}
 
-			out.append(text + "\n\r");
+			out.append(text + "\n");
 			out.close();
 			System.out.println(text);
 
@@ -248,7 +248,7 @@ public class SimpleLog {
 				System.out.println(dateFormat.format(time) + " ");
 			}
 
-			out.append(text + "\n\r");
+			out.append(text + "\n");
 			out.close();
 			System.out.println(text);
 
