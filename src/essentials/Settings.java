@@ -19,6 +19,7 @@ public class Settings {
 	File file;
 	Properties settings = new Properties();
 	SimpleLog log;
+	boolean useXML;
 
 	/**
 	 * Use this to read in the settings file
@@ -32,21 +33,29 @@ public class Settings {
 	 *            The log that should be logged to
 	 */
 
-	public Settings(File file, Properties defaultValues, SimpleLog log) {
+	public Settings(File file, Properties defaultValues, boolean useXML,
+			SimpleLog log) {
 		this.file = file;
 		String filename = file.getName();
+		this.useXML = useXML;
 		log.debug("Reading " + filename);
 		try {
 			if (file.canRead()) {
 
 				try {
-					settings.loadFromXML(new FileInputStream(file));
-					log.info("Settings loaded from " + filename);
+					if (useXML)
+						settings.loadFromXML(new FileInputStream(file));
+					else
+						settings.load(new FileInputStream(file));
+					log.info("Loaded from " + filename);
 				} catch (InvalidPropertiesFormatException e) {
-					log.error("Wrong properties format in " + filename
+					log.error("Invalid properties format in " + filename
 							+ " Resetting " + filename + " to default values.");
 					settings = defaultValues;
-					settings.storeToXML(new FileOutputStream(file), null);
+					if (useXML)
+						settings.storeToXML(new FileOutputStream(file), null);
+					else
+						settings.store(new FileOutputStream(file), null);
 				}
 
 			} else {
@@ -58,7 +67,10 @@ public class Settings {
 							+ " doesn't exist! Using default settings");
 					file.createNewFile();
 					settings = defaultValues;
-					settings.storeToXML(new FileOutputStream(file), null);
+					if (useXML)
+						settings.storeToXML(new FileOutputStream(file), null);
+					else
+						settings.store(new FileOutputStream(file), null);
 				}
 			}
 
@@ -83,9 +95,12 @@ public class Settings {
 	public void setSetting(String key, String value) {
 		settings.setProperty(key, value);
 		try {
-			settings.storeToXML(new FileOutputStream(this.file), null);
+			if (useXML)
+				settings.storeToXML(new FileOutputStream(this.file), null);
+			else
+				settings.store(new FileOutputStream(this.file), null);
 		} catch (IOException e) {
-			log.fatal("IOException while saving"+ e.getMessage());
+			log.fatal("IOException while saving" + e.getMessage());
 			log.logStackTrace(e);
 			System.exit(1);
 		}
