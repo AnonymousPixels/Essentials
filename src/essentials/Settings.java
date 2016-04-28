@@ -18,10 +18,11 @@ import java.util.Properties;
  */
 public class Settings {
 	File file;
-	Properties settings = new Properties();
+	Properties settings;
+	Properties defaultValues;
 	SimpleLog log;
 	boolean useXML;
-	String comment;
+	String comment, filename;
 
 	/**
 	 * Use this to read a config file.
@@ -40,8 +41,9 @@ public class Settings {
 
 	public Settings(File file, Properties defaultValues, boolean useXML,
 			SimpleLog log) {
+		this.defaultValues = defaultValues;
 		this.file = file;
-		String filename = file.getName();
+		filename = file.getName();
 		this.useXML = useXML;
 		log.debug("Reading " + filename);
 		try {
@@ -109,8 +111,10 @@ public class Settings {
 	/**
 	 * Set a setting. The config file will be automatically updated
 	 * 
-	 * @param key The key of the setting
-	 * @param value The value of the setting
+	 * @param key
+	 *            The key of the setting
+	 * @param value
+	 *            The value of the setting
 	 */
 	public void setSetting(String key, String value) {
 		settings.setProperty(key, value);
@@ -190,7 +194,73 @@ public class Settings {
 	/**
 	 * Sync all values to the file. Not necessary if you use .setSetting()
 	 */
-	public void writeToFile() {
+	public boolean writeToFile() {
+		try {
+			if (useXML)
+				settings.storeToXML(new FileOutputStream(this.file), comment);
+			else
+				settings.store(new FileOutputStream(this.file), comment);
+		} catch (IOException e) {
+			log.fatal("IOException while saving\n" + e.getMessage());
+			log.logStackTrace(e);
+			return false;
+		}
+		return true;
+	}
 
+	/**
+	 * Reloads the file manually
+	 */
+	public void reload() {
+		log.debug("Reloading " + filename);
+		try {
+			if (file.canRead()) {
+
+				try {
+					if (useXML)
+						settings.loadFromXML(new FileInputStream(file));
+					else
+						settings.load(new FileInputStream(file));
+					log.info("Reloaded " + filename);
+				} catch (InvalidPropertiesFormatException e) {
+					log.error("Invalid properties format in '" + filename
+							+ "' Resetting '" + filename
+							+ "' to default values.");
+					settings = defaultValues;
+					if (useXML)
+						settings.storeToXML(new FileOutputStream(file), null);
+					else
+						settings.store(new FileOutputStream(file), null);
+				}
+
+			} else {
+				if (file.exists()) {
+					log.fatal("Can't read '" + filename + "'");
+					System.exit(1);
+				} else {
+					log.warning("'" + filename
+							+ "' doesn't exist! Using default values");
+					file.createNewFile();
+					settings = defaultValues;
+					if (useXML)
+						settings.storeToXML(new FileOutputStream(file), null);
+					else
+						settings.store(new FileOutputStream(file), null);
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+
+			log.fatal("FileNotFoundException while reading '" + filename + "'"
+					+ e.getMessage());
+			log.logStackTrace(e);
+			System.exit(1);
+
+		} catch (IOException e) {
+			log.fatal("IOException while reading '" + filename + "'"
+					+ e.getMessage());
+			log.logStackTrace(e);
+			System.exit(1);
+		}
 	}
 }
