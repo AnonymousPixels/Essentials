@@ -10,7 +10,8 @@ import java.util.Properties;
 
 /**
  * 
- * A simple class for loading and saving settings to XML files
+ * A simple class for keeping a Properties object in sync with a .properties or
+ * .xml file
  * 
  * @author Maximilian von Gaisberg
  *
@@ -23,13 +24,16 @@ public class Settings {
 	String comment;
 
 	/**
-	 * Use this to read a config 
+	 * Use this to read a config file.
 	 * 
 	 * 
 	 * @param file
 	 *            The file to be read
 	 * @param defaultValues
-	 *            The values that should be used if the file is broken
+	 *            The values that should be used if the file is broken or
+	 *            missing
+	 * @param useXML
+	 *            You can choose between .xml and .properties files
 	 * @param log
 	 *            The log that should be logged to
 	 */
@@ -91,10 +95,23 @@ public class Settings {
 		}
 	}
 
+	/**
+	 * Get a setting from the config file
+	 * 
+	 * @param key
+	 *            The key of the value that should be read in
+	 * @return
+	 */
 	public String getSetting(String key) {
 		return settings.getProperty(key);
 	}
 
+	/**
+	 * Set a setting. The config file will be automatically updated
+	 * 
+	 * @param key The key of the setting
+	 * @param value The value of the setting
+	 */
 	public void setSetting(String key, String value) {
 		settings.setProperty(key, value);
 		try {
@@ -130,30 +147,50 @@ public class Settings {
 	 * 
 	 * @param comment
 	 */
-	public void setComment(String comment, boolean updateNow) {
+	public boolean setComment(String comment, boolean updateNow) {
 		this.comment = comment;
 		if (updateNow) {
 
 			try {
 				if (useXML)
-					settings.storeToXML(new FileOutputStream(this.file), comment);
+					settings.storeToXML(new FileOutputStream(this.file),
+							comment);
 				else
 					settings.store(new FileOutputStream(this.file), comment);
 			} catch (IOException e) {
 				log.fatal("IOException while saving\n" + e.getMessage());
 				log.logStackTrace(e);
-				System.exit(1);
+				return false;
 			}
 
 		}
+		return true;
 	}
 
+	/**
+	 * Get the properties object. If you modify values in this object it won't
+	 * be automatically synced to the file. Use .writeToFile() to do so
+	 * 
+	 * @return
+	 */
 	public Properties getProperties() {
 		return settings;
 	}
 
+	/**
+	 * Set the properties object. It will be synced to the file.
+	 * 
+	 * @param props
+	 *            The properties object ot be synced
+	 */
 	public void setProperties(Properties props) {
 		this.settings = props;
 	}
 
+	/**
+	 * Sync all values to the file. Not necessary if you use .setSetting()
+	 */
+	public void writeToFile() {
+
+	}
 }
