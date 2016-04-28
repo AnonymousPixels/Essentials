@@ -20,6 +20,7 @@ public class Settings {
 	Properties settings = new Properties();
 	SimpleLog log;
 	boolean useXML;
+	String comment;
 
 	/**
 	 * Use this to read in the settings file
@@ -47,10 +48,11 @@ public class Settings {
 						settings.loadFromXML(new FileInputStream(file));
 					else
 						settings.load(new FileInputStream(file));
-					log.info("Loaded from " + filename);
+					log.info("Loaded " + filename);
 				} catch (InvalidPropertiesFormatException e) {
-					log.error("Invalid properties format in " + filename
-							+ " Resetting " + filename + " to default values.");
+					log.error("Invalid properties format in '" + filename
+							+ "' Resetting '" + filename
+							+ "' to default values.");
 					settings = defaultValues;
 					if (useXML)
 						settings.storeToXML(new FileOutputStream(file), null);
@@ -60,11 +62,11 @@ public class Settings {
 
 			} else {
 				if (file.exists()) {
-					log.fatal("Can't read " + filename);
+					log.fatal("Can't read '" + filename + "'");
 					System.exit(1);
 				} else {
-					log.warning(filename
-							+ " doesn't exist! Using default settings");
+					log.warning("'" + filename
+							+ "' doesn't exist! Using default values");
 					file.createNewFile();
 					settings = defaultValues;
 					if (useXML)
@@ -76,13 +78,14 @@ public class Settings {
 
 		} catch (FileNotFoundException e) {
 
-			log.fatal("FileNotFoundException while reading " + filename
+			log.fatal("FileNotFoundException while reading '" + filename + "'"
 					+ e.getMessage());
 			log.logStackTrace(e);
 			System.exit(1);
 
 		} catch (IOException e) {
-			log.fatal("IOException while reading" + filename + e.getMessage());
+			log.fatal("IOException while reading '" + filename + "'"
+					+ e.getMessage());
 			log.logStackTrace(e);
 			System.exit(1);
 		}
@@ -100,9 +103,57 @@ public class Settings {
 			else
 				settings.store(new FileOutputStream(this.file), null);
 		} catch (IOException e) {
-			log.fatal("IOException while saving" + e.getMessage());
+			log.fatal("IOException while saving\n" + e.getMessage());
 			log.logStackTrace(e);
 			System.exit(1);
 		}
 	}
+
+	/**
+	 * Reads a String from the file and splits it into pieces to fit in an
+	 * array. Strings will be split on linebreaks, punctuation characters or
+	 * whitespace characters
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public String[] getArray(String key) {
+
+		return settings.getProperty(key).split(
+				"[\\r\\n\\p{Punct}\\p{Blank}\\s]+");
+
+	}
+
+	/**
+	 * Add a comment to the beginning of the File. Will only be added if you
+	 * call .setSetting afterwards or set 'updateNow' to true
+	 * 
+	 * @param comment
+	 */
+	public void setComment(String comment, boolean updateNow) {
+		this.comment = comment;
+		if (updateNow) {
+
+			try {
+				if (useXML)
+					settings.storeToXML(new FileOutputStream(this.file), null);
+				else
+					settings.store(new FileOutputStream(this.file), null);
+			} catch (IOException e) {
+				log.fatal("IOException while saving\n" + e.getMessage());
+				log.logStackTrace(e);
+				System.exit(1);
+			}
+
+		}
+	}
+
+	public Properties getProperties() {
+		return settings;
+	}
+
+	public void setProperties(Properties props) {
+		this.settings = props;
+	}
+
 }
