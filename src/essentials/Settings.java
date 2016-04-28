@@ -43,11 +43,13 @@ public class Settings {
 			SimpleLog log) {
 		this.defaultValues = defaultValues;
 		this.file = file;
-		filename = file.getName();
 		this.useXML = useXML;
+		this.log = log;
+
+		filename = file.getName();
 		log.debug("Reading " + filename);
 		try {
-			if (file.canRead() && file.exists()) {
+			if (file.canRead()) {
 
 				try {
 					if (useXML)
