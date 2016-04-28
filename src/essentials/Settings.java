@@ -23,7 +23,7 @@ public class Settings {
 	String comment;
 
 	/**
-	 * Use this to read in the settings file
+	 * Use this to read a config 
 	 * 
 	 * 
 	 * @param file
@@ -136,9 +136,9 @@ public class Settings {
 
 			try {
 				if (useXML)
-					settings.storeToXML(new FileOutputStream(this.file), null);
+					settings.storeToXML(new FileOutputStream(this.file), comment);
 				else
-					settings.store(new FileOutputStream(this.file), null);
+					settings.store(new FileOutputStream(this.file), comment);
 			} catch (IOException e) {
 				log.fatal("IOException while saving\n" + e.getMessage());
 				log.logStackTrace(e);
