@@ -18,7 +18,7 @@ import java.util.Properties;
  */
 public class Settings {
 	File file;
-	Properties settings;
+	Properties settings = new Properties();
 	Properties defaultValues;
 	SimpleLog log;
 	boolean useXML;
@@ -47,7 +47,7 @@ public class Settings {
 		this.useXML = useXML;
 		log.debug("Reading " + filename);
 		try {
-			if (file.canRead()) {
+			if (file.canRead() && file.exists()) {
 
 				try {
 					if (useXML)
