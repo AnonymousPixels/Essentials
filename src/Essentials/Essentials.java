@@ -68,9 +68,8 @@ public class Essentials {
 	 *            component
 	 * @return boolean if false, exception occurred
 	 */
-	public static boolean addComponent(Container container,
-			GridBagLayout layout, Component component, int x, int y, int width,
-			int height, double weightx, double weighty, Insets insets) {
+	public static boolean addComponent(Container container, GridBagLayout layout, Component component, int x, int y,
+			int width, int height, double weightx, double weighty, Insets insets) {
 
 		try {
 
@@ -131,8 +130,7 @@ public class Essentials {
 
 		try {
 
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-					"dd.MM.yyyy hh:mm:ss");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
 			if (!file.exists())
@@ -141,8 +139,7 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 
 			if (printTimestamp)
-				fileWriter.append((CharSequence) simpleDateFormat
-						.format(timestamp) + " " + text + "\n");
+				fileWriter.append((CharSequence) simpleDateFormat.format(timestamp) + " " + text + "\n");
 			else
 				fileWriter.append(text + "\n");
 
@@ -175,8 +172,7 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 			fileWriter.append(text + "\n");
 			fileWriter.close();
-			System.out.println("Wrote '" + text + "' into '" + file.getPath()
-					+ "'");
+			System.out.println("Wrote '" + text + "' into '" + file.getPath() + "'");
 		} catch (IOException e) {
 			return false;
 		}
@@ -193,8 +189,7 @@ public class Essentials {
 	 * @return The content of the file
 	 */
 	public static String readFile(File file) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(
-				file.getAbsolutePath()));
+		BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
 		StringBuilder sb = new StringBuilder();
 		try {
 
@@ -252,8 +247,7 @@ public class Essentials {
 	 *            The files to put in the zip-folder
 	 * @throws IOException
 	 */
-	public static boolean zip(File zipFile, File[] containingFiles)
-			throws IOException {
+	public static boolean zip(File zipFile, File[] containingFiles) throws IOException {
 
 		if (zipFile.exists()) {
 			System.err.println("Zip file already exists, please try another");
@@ -268,11 +262,9 @@ public class Essentials {
 			File file = containingFiles[i];
 			if (!file.exists()) {
 				zos.close();
-				throw new FileNotFoundException("Couldn't find file "
-						+ file.getAbsolutePath());
+				throw new FileNotFoundException("Couldn't find file " + file.getAbsolutePath());
 			}
-			BufferedInputStream bis = new BufferedInputStream(
-					new FileInputStream(file));
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
 			crc.reset();
 			while ((bytesRead = bis.read(buffer)) != -1) {
 				crc.update(buffer, 0, bytesRead);
@@ -303,8 +295,7 @@ public class Essentials {
 	 *            The path of the target zip-file
 	 * @throws IOException
 	 */
-	public static void zipAndCompress(String target, String[] files)
-			throws IOException {
+	public static void zipAndCompress(String target, String[] files) throws IOException {
 		byte b[] = new byte[512];
 		ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(target));
 		for (int i = 0; i < files.length; i++) {
@@ -332,8 +323,7 @@ public class Essentials {
 	 * @throws IOException
 	 */
 	public static String sendHTTPRequest(URL url) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				url.openStream()));
+		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 		String answer = "";
 		String line = "";
 		while (null != (line = br.readLine())) {
@@ -352,8 +342,7 @@ public class Essentials {
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	public static boolean downloadFileFromURL(URL url, File saveFile)
-			throws IOException, FileNotFoundException {
+	public static boolean downloadFileFromURL(URL url, File saveFile) throws IOException, FileNotFoundException {
 
 		HttpURLConnection c;
 
@@ -363,8 +352,7 @@ public class Essentials {
 
 		BufferedInputStream in = new BufferedInputStream(c.getInputStream());
 
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(
-				saveFile));
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(saveFile));
 		byte[] buf = new byte[256];
 		int n = 0;
 		while ((n = in.read(buf)) >= 0) {
@@ -432,17 +420,12 @@ public class Essentials {
 			FileWriter fw = new java.io.FileWriter(file);
 
 			String vbs = "Set objFSO = CreateObject(\"Scripting.FileSystemObject\")\n"
-					+ "Set colDrives = objFSO.Drives\n"
-					+ "Set objDrive = colDrives.item(\""
-					+ drive
-					+ "\")\n"
+					+ "Set colDrives = objFSO.Drives\n" + "Set objDrive = colDrives.item(\"" + drive + "\")\n"
 					+ "Wscript.Echo objDrive.SerialNumber"; // see note
 			fw.write(vbs);
 			fw.close();
-			Process p = Runtime.getRuntime().exec(
-					"cscript //NoLogo " + file.getPath());
-			BufferedReader input = new BufferedReader(new InputStreamReader(
-					p.getInputStream()));
+			Process p = Runtime.getRuntime().exec("cscript //NoLogo " + file.getPath());
+			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String line;
 			while ((line = input.readLine()) != null) {
 				result += line;
@@ -462,18 +445,14 @@ public class Essentials {
 			FileWriter fw = new java.io.FileWriter(file);
 
 			String vbs = "Set objWMIService = GetObject(\"winmgmts:\\\\.\\root\\cimv2\")\n"
-					+ "Set colItems = objWMIService.ExecQuery _ \n"
-					+ "   (\"Select * from Win32_BaseBoard\") \n"
-					+ "For Each objItem in colItems \n"
-					+ "    Wscript.Echo objItem.SerialNumber \n"
+					+ "Set colItems = objWMIService.ExecQuery _ \n" + "   (\"Select * from Win32_BaseBoard\") \n"
+					+ "For Each objItem in colItems \n" + "    Wscript.Echo objItem.SerialNumber \n"
 					+ "    exit for  ' do the first cpu only! \n" + "Next \n";
 
 			fw.write(vbs);
 			fw.close();
-			Process p = Runtime.getRuntime().exec(
-					"cscript //NoLogo " + file.getPath());
-			BufferedReader input = new BufferedReader(new InputStreamReader(
-					p.getInputStream()));
+			Process p = Runtime.getRuntime().exec("cscript //NoLogo " + file.getPath());
+			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			String line;
 			while ((line = input.readLine()) != null) {
 				result += line;
@@ -487,8 +466,7 @@ public class Essentials {
 
 	public static void main(String[] args) {
 		String cpuId = getMotherboardSN();
-		javax.swing.JOptionPane.showConfirmDialog((java.awt.Component) null,
-				cpuId, "Motherboard serial number",
+		javax.swing.JOptionPane.showConfirmDialog((java.awt.Component) null, cpuId, "Motherboard serial number",
 				javax.swing.JOptionPane.DEFAULT_OPTION);
 	}
 
@@ -509,4 +487,21 @@ public class Essentials {
 		return string.substring(0, string.length() - 1);
 	}
 
+	/**
+	 * Checks, if a string is included in a string array
+	 * 
+	 * @param array
+	 *            String array
+	 * @param string
+	 *            String
+	 * @return true if included, false if not
+	 */
+	public static boolean included(String[] array, String string) {
+
+		for (String s : array) {
+			if (s.equals(string))
+				return true;
+		}
+		return false;
+	}
 }
