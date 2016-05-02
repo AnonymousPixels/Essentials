@@ -503,14 +503,10 @@ public class Essentials {
 	public static String getAssembledStringArray(String[] array) {
 
 		String string = "";
-		for (int i = 0; i < array.length; i++) {
-
-			if (!(i == array.length - 1))
-				string = string + array[i] + " ";
-			else
-				string = string + array[i];
+		for (String part : array) {
+			string = string + part + " ";
 		}
-		return string;
+		return string.substring(0, string.length() - 1);
 	}
 
 }
