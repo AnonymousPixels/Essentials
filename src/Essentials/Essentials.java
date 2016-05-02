@@ -68,9 +68,8 @@ public class Essentials {
 	 *            component
 	 * @return boolean if false, exception occurred
 	 */
-	public static boolean addComponent(Container container,
-			GridBagLayout layout, Component component, int x, int y, int width,
-			int height, double weightx, double weighty, Insets insets) {
+	public static boolean addComponent(Container container, GridBagLayout layout, Component component, int x, int y,
+			int width, int height, double weightx, double weighty, Insets insets) {
 
 		try {
 
@@ -131,8 +130,7 @@ public class Essentials {
 
 		try {
 
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-					"dd.MM.yyyy hh:mm:ss");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
 			if (!file.exists())
@@ -141,8 +139,7 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 
 			if (printTimestamp)
-				fileWriter.append((CharSequence) simpleDateFormat
-						.format(timestamp) + " " + text + "\n");
+				fileWriter.append((CharSequence) simpleDateFormat.format(timestamp) + " " + text + "\n");
 			else
 				fileWriter.append(text + "\n");
 
@@ -175,8 +172,7 @@ public class Essentials {
 			FileWriter fileWriter = new FileWriter(file, true);
 			fileWriter.append(text + "\n");
 			fileWriter.close();
-			System.out.println("Wrote '" + text + "' into '" + file.getPath()
-					+ "'");
+			System.out.println("Wrote '" + text + "' into '" + file.getPath() + "'");
 		} catch (IOException e) {
 			return false;
 		}
@@ -193,8 +189,7 @@ public class Essentials {
 	 * @return The content of the file
 	 */
 	public static String readFile(File file) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(
-				file.getAbsolutePath()));
+		BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
 		StringBuilder sb = new StringBuilder();
 		try {
 
@@ -252,8 +247,7 @@ public class Essentials {
 	 *            The files to put in the zip-folder
 	 * @throws IOException
 	 */
-	public static boolean zip(File zipFile, File[] containingFiles)
-			throws IOException {
+	public static boolean zip(File zipFile, File[] containingFiles) throws IOException {
 
 		if (zipFile.exists()) {
 			System.err.println("Zip file already exists, please try another");
@@ -268,11 +262,9 @@ public class Essentials {
 			File file = containingFiles[i];
 			if (!file.exists()) {
 				zos.close();
-				throw new FileNotFoundException("Couldn't find file "
-						+ file.getAbsolutePath());
+				throw new FileNotFoundException("Couldn't find file " + file.getAbsolutePath());
 			}
-			BufferedInputStream bis = new BufferedInputStream(
-					new FileInputStream(file));
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
 			crc.reset();
 			while ((bytesRead = bis.read(buffer)) != -1) {
 				crc.update(buffer, 0, bytesRead);
@@ -303,8 +295,7 @@ public class Essentials {
 	 *            The path of the target zip-file
 	 * @throws IOException
 	 */
-	public static void zipAndCompress(String target, String[] files)
-			throws IOException {
+	public static void zipAndCompress(String target, String[] files) throws IOException {
 		byte b[] = new byte[512];
 		ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(target));
 		for (int i = 0; i < files.length; i++) {
@@ -332,8 +323,7 @@ public class Essentials {
 	 * @throws IOException
 	 */
 	public static String sendHTTPRequest(URL url) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				url.openStream()));
+		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 		String answer = "";
 		String line = "";
 		while (null != (line = br.readLine())) {
@@ -352,8 +342,7 @@ public class Essentials {
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
-	public static boolean downloadFileFromURL(URL url, File saveFile)
-			throws IOException, FileNotFoundException {
+	public static boolean downloadFileFromURL(URL url, File saveFile) throws IOException, FileNotFoundException {
 
 		HttpURLConnection c;
 
@@ -363,8 +352,7 @@ public class Essentials {
 
 		BufferedInputStream in = new BufferedInputStream(c.getInputStream());
 
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(
-				saveFile));
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(saveFile));
 		byte[] buf = new byte[256];
 		int n = 0;
 		while ((n = in.read(buf)) >= 0) {
@@ -424,6 +412,7 @@ public class Essentials {
 
 	}
 
+<<<<<<< HEAD
 	public static String getSerialNumber(String drive) {
 		String result = "";
 		try {
@@ -496,4 +485,26 @@ public class Essentials {
 		  }
 	
 
+=======
+	/**
+	 * Assembles a String Array into one String, where the parts are separated
+	 * by space
+	 * 
+	 * @param array
+	 *            The String Array, which will be assembled
+	 * @return The assembled String
+	 */
+	public static String getAssembledStringArray(String[] array) {
+
+		String string = "";
+		for (int i = 0; i < array.length; i++) {
+
+			if (!(i == array.length - 1))
+				string = string + array[i] + " ";
+			else
+				string = string + array[i];
+		}
+		return string;
+	}
+>>>>>>> origin/master
 }
