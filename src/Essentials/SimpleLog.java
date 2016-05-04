@@ -280,7 +280,7 @@ public class SimpleLog {
 
 				text2 += (CharSequence) dateFormat.format(time);
 
-				out.append(text2);
+				out.append(text2 + "\n");
 				System.out.println(text2);
 			}
 			for (int i = 0; i < text.length(); i++) {
