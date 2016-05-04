@@ -234,7 +234,7 @@ public class SimpleLog {
 		}
 		return true;
 	}
-	
+
 	public boolean fatal(String text) {
 
 		text = "FATAL ERROR: " + text;
@@ -257,4 +257,45 @@ public class SimpleLog {
 		}
 		return true;
 	}
+
+	public boolean startupMessage(String text) {
+
+		try {
+
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			FileWriter out = new FileWriter(file, true);
+			for (int i = 0; i < text.length(); i++) {
+				out.append("=");
+				System.out.print("=");
+			}
+			out.append("\n" + text + "\n");
+			System.out.println("\n" + text);
+			if (timestamp) {
+
+				String text2 = "";
+
+				for (int i = 0; i < (text.length() - (((CharSequence) dateFormat
+						.format(time)).length())); i += 2)
+					text2 += " ";
+
+				text2 += (CharSequence) dateFormat.format(time);
+
+				out.append(text2);
+				System.out.println(text2);
+			}
+			for (int i = 0; i < text.length(); i++) {
+				out.append("=");
+				System.out.print("=");
+			}
+			out.append("\n");
+			System.out.println("\n");
+			out.close();
+			System.out.println(text);
+
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+
 }
