@@ -265,4 +265,13 @@ public class Settings {
 			System.exit(1);
 		}
 	}
+
+	public boolean containsKeys(String[] keys) {
+		for (String string : keys) {
+			if (!settings.containsKey(string))
+				return false;
+		}
+		return true;
+	}
+
 }
