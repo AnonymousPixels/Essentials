@@ -3,12 +3,20 @@
  */
 package essentials;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.BadPaddingException;
@@ -169,4 +177,152 @@ public class Security {
 
 	}
 
+	/**
+	 * Returns the serial number of the selected drive
+	 * 
+	 * @param drive
+	 *            The drive to use
+	 * @return
+	 */
+	public static String getDriveSN(String drive) {
+		String result = "";
+		try {
+			File file = File.createTempFile("getdrivesn", ".vbs");
+			file.deleteOnExit();
+			FileWriter fw = new java.io.FileWriter(file);
+
+			String vbs = "Set objFSO = CreateObject(\"Scripting.FileSystemObject\")\n"
+					+ "Set colDrives = objFSO.Drives\n"
+					+ "Set objDrive = colDrives.item(\""
+					+ drive
+					+ "\")\n"
+					+ "Wscript.Echo objDrive.SerialNumber"; // see note
+			fw.write(vbs);
+			fw.close();
+			Process p = Runtime.getRuntime().exec(
+					"cscript //NoLogo " + file.getPath());
+			BufferedReader input = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			String line;
+			while ((line = input.readLine()) != null) {
+				result += line;
+			}
+			input.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result.trim();
+	}
+
+	/**
+	 * Returns the serial number of your Motherboard
+	 * 
+	 * @return
+	 */
+	public static String getMotherboardSN() {
+		String result = "";
+		try {
+			File file = File.createTempFile("getmotherboardsn", ".vbs");
+			file.deleteOnExit();
+			FileWriter fw = new java.io.FileWriter(file);
+
+			String vbs = "Set objWMIService = GetObject(\"winmgmts:\\\\.\\root\\cimv2\")\n"
+					+ "Set colItems = objWMIService.ExecQuery _ \n"
+					+ "   (\"Select * from Win32_BaseBoard\") \n"
+					+ "For Each objItem in colItems \n"
+					+ "    Wscript.Echo objItem.SerialNumber \n"
+					+ "    exit for  ' do the first cpu only! \n" + "Next \n";
+
+			fw.write(vbs);
+			fw.close();
+			Process p = Runtime.getRuntime().exec(
+					"cscript //NoLogo " + file.getPath());
+			BufferedReader input = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			String line;
+			while ((line = input.readLine()) != null) {
+				result += line;
+			}
+			input.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result.trim();
+	}
+
+	/**
+	 * Will return the MAC address of the NetworkInterface currently in use.
+	 * Will return null if something goes wrong.
+	 * 
+	 * @return The MAC address
+	 */
+	public static String getMac() {
+		InetAddress ip;
+		try {
+			ip = InetAddress.getLocalHost();
+
+			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+
+			byte[] mac = network.getHardwareAddress();
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < mac.length; i++) {
+				sb.append(String.format("%02X%s", mac[i],
+						(i < mac.length - 1) ? "-" : ""));
+			}
+			return sb.toString();
+		} catch (UnknownHostException | SocketException e) {
+			System.out.println("Can't get MAC address");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	/**
+	 * Returns the SHA-256 hash of a given string
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public static String hash(String data) {
+		MessageDigest messageDigest;
+		try {
+			messageDigest = MessageDigest.getInstance("SHA-256");
+			messageDigest.update(data.getBytes());
+			return new String(messageDigest.digest());
+		} catch (NoSuchAlgorithmException e) {
+			System.out
+					.println("NoSuchAlgorithmException! Can't calculate your hash!");
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	/**
+	 * Get a unique Hardware Identifier consisting of the serial numbers of the
+	 * C drive, the motherboard and the processor identifier It is recommended,
+	 * that you don't use the MAC address, because it may change if you connect
+	 * via an other NetworkInterface or if a user changes it manually
+	 * 
+	 * @param useMac
+	 *            If it should use the MAC or not. NOT RECOMMENCED
+	 * @return The HWID
+	 */
+	public static String getHWID(boolean useMac) {
+		String data = getMotherboardSN() + " " + getDriveSN("C") + " "
+				+ System.getenv("PROCESSOR_IDENTIFIER");
+		data += (useMac ? getMac() : "");
+		String result = "";
+		char[] chars = hash(data).toCharArray();
+		for (char c : chars) {
+			result += Integer.toHexString((int) c);
+		}
+		return result;
+
+	}
+
+	public static void main(String[] args) {
+		System.out.println(getHWID(false));
+	}
 }
