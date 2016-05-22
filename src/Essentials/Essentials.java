@@ -22,11 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -37,17 +33,20 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * This 'Essentials'-class contains some quite useful methods.
+ * Contains some quite useful methods.
  * 
- * @author Felix Beutter
  * @author Maximilian von Gaisberg
- * @version 1.0.0
+ * @author Felix Beutter
+ * 
  */
 public class Essentials {
 
+	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();// something
+																				// bytesToHex()
+																				// needs
+
 	/**
-	 * The 'addComponent' method adds a component to a container using the
-	 * GridBagLayout.
+	 * Adds a component to a container using the GridBagLayout.
 	 * 
 	 * @param container
 	 *            Container to which the component will be added
@@ -97,8 +96,7 @@ public class Essentials {
 	}
 
 	/**
-	 * The 'getHashMapObjects' method returns a Object[] which contains the keys
-	 * of the given HashMap.
+	 * Returns a Object[] that contains the keys of the given HashMap.
 	 * 
 	 * @param hashmap
 	 *            HashMap<String, Object> object
@@ -121,7 +119,10 @@ public class Essentials {
 	}
 
 	/**
-	 * The 'log' method writes a string (with a timestamp) into a file.
+	 * Writes a string (with a timestamp) to a file.
+	 * 
+	 * @deprecated {@link SimpleLog} handles this much more comfortable and
+	 *             professionally
 	 * 
 	 * @param text
 	 *            The String, that will be written to the file
@@ -160,13 +161,12 @@ public class Essentials {
 	}
 
 	/**
-	 * Writes a String to the end of a file. The 'printStringToFile' method
-	 * writes a String to the end of a file.
+	 * Writes a String to the end of a file.
 	 * 
 	 * @param text
 	 *            The String, that will be written to the file
 	 * @param file
-	 *            The file where the text will be saved to
+	 *            The file that should be written to
 	 * @return boolean if false, exception occurred
 	 */
 	public static boolean printStringToFile(String text, File file) {
@@ -192,7 +192,7 @@ public class Essentials {
 	 * Reads a given file and returns the text
 	 * 
 	 * @param file
-	 *            The file you want to read
+	 *            The file to read
 	 * 
 	 * @return The content of the file
 	 */
@@ -218,8 +218,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Counts the number of lines of the given file. The 'countFileLines' method
-	 * counts the number of lines of the given file.
+	 * Counts the number of lines in the given file.
 	 * 
 	 * @param file
 	 *            The file, which lines will be counted
@@ -248,7 +247,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Puts files in an uncompressed zip folder
+	 * Puts files in an uncompressed .zip folder
 	 * 
 	 * @param zipFile
 	 *            The target zip-folder
@@ -299,7 +298,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Puts files in a zip-folder and compresses them
+	 * Puts files in a .zip folder and compresses them
 	 * 
 	 * @param files
 	 *            The files to put into the zip-file
@@ -327,8 +326,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Sends HTTP requests to a Webserver and fetch the answer A method to send
-	 * HTTP requests to a Webserver and fetch the answer
+	 * A method to send HTTP requests to a Webserver and fetch the answer
 	 * 
 	 * @param url
 	 *            The URL you want to send a request to
@@ -347,7 +345,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Downloads a file from a url and save it on the computer
+	 * Downloads a file from an URL and saves it on the computer
 	 * 
 	 * @param url
 	 *            The URL of the file
@@ -381,7 +379,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Copies a BufferedImage.
+	 * Copies a BufferedImage
 	 * 
 	 * @param image
 	 *            The image that should be copied
@@ -396,8 +394,8 @@ public class Essentials {
 	}
 
 	/**
-	 * Search for all IPs in the local network unsing the arp -a command. ONly
-	 * works on Windows
+	 * Search for all IPs in the local network using the arp -a command. Only
+	 * works on Windows machines
 	 * 
 	 * @return An String array containing the IPs
 	 * @throws IOException
@@ -429,11 +427,11 @@ public class Essentials {
 	}
 
 	/**
-	 * Assembles a String Array into one String, where the parts are separated
-	 * by space
+	 * Assembles a String array to one String, in which the parts are separated
+	 * by blanks
 	 * 
 	 * @param array
-	 *            The String Array, which will be assembled
+	 *            The String array that will be assembled
 	 * @return The assembled String
 	 */
 	public static String getAssembledStringArray(String[] array) {
@@ -446,7 +444,24 @@ public class Essentials {
 	}
 
 	/**
-	 * Checks, if a string is included in a string array
+	 * Represents a byte array in a much more comfortable an readable way
+	 * 
+	 * @param bytes
+	 *            the bytes you want to convert
+	 * @return the hex string
+	 */
+	public static String bytesToHex(byte[] bytes) {
+		char[] hexChars = new char[bytes.length * 2];
+		for (int j = 0; j < bytes.length; j++) {
+			int v = bytes[j] & 0xFF;
+			hexChars[j * 2] = hexArray[v >>> 4];
+			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+		}
+		return new String(hexChars);
+	}
+
+	/**
+	 * Checks if a string is included in a string array
 	 * 
 	 * @param array
 	 *            String array

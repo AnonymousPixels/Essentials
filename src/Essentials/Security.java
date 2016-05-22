@@ -284,12 +284,12 @@ public class Security {
 	 * @param data
 	 * @return
 	 */
-	public static String hash(String data) {
+	public static byte[] hash(String data) {
 		MessageDigest messageDigest;
 		try {
 			messageDigest = MessageDigest.getInstance("SHA-256");
 			messageDigest.update(data.getBytes());
-			return new String(messageDigest.digest());
+			return messageDigest.digest();
 		} catch (NoSuchAlgorithmException e) {
 			System.out
 					.println("NoSuchAlgorithmException! Can't calculate your hash!");
@@ -301,24 +301,29 @@ public class Security {
 
 	/**
 	 * Get a unique Hardware Identifier consisting of the serial numbers of the
-	 * C drive, the motherboard and the processor identifier It is recommended,
-	 * that you don't use the MAC address, because it may change if you connect
-	 * via an other NetworkInterface or if a user changes it manually
+	 * C drive, the motherboard and the processor identifier.
+	 * <p>
+	 * The return value will be a 64 character long string that represents a
+	 * SHA-256 {@link hash}.
+	 * <p>
+	 * DO NOT use it for stuff like hardware-banning because it is easy to mount
+	 * drives to other letters or to change your MAC address. What you can do is
+	 * whitelisting. The HWID is basically a SHA-256 hash, therefore it is
+	 * impossible to reverse-engineer what's inside.
+	 * <p>
+	 * It is recommended not to use the MAC address, because it may change if
+	 * you connect via an other NetworkInterface.
 	 * 
 	 * @param useMac
-	 *            If it should use the MAC or not. NOT RECOMMENCED
+	 *            If it should use the MAC or not. NOT RECOMMENDED
 	 * @return The HWID
 	 */
 	public static String getHWID(boolean useMac) {
 		String data = getMotherboardSN() + " " + getDriveSN("C") + " "
 				+ System.getenv("PROCESSOR_IDENTIFIER");
 		data += (useMac ? getMac() : "");
-		String result = "";
-		char[] chars = hash(data).toCharArray();
-		for (char c : chars) {
-			result += Integer.toHexString((int) c);
-		}
-		return result;
+		byte[] bytes = hash(data);
+		return Essentials.bytesToHex(bytes);
 
 	}
 
