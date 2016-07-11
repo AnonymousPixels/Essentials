@@ -21,6 +21,7 @@ public class SimpleLog {
 	static File file;
 	static boolean timestamp;
 	SimpleDateFormat dateFormat;
+	boolean dummy = false;
 
 	/**
 	 * Constructor of 'Log' class, which creates the log file
@@ -55,6 +56,13 @@ public class SimpleLog {
 	}
 
 	/**
+	 * Will create a dummy-log that does not log anything
+	 */
+	public SimpleLog() {
+		dummy = true;
+	}
+
+	/**
 	 * Add a new entry to the logfile
 	 * 
 	 * @param text
@@ -62,7 +70,10 @@ public class SimpleLog {
 	 * @return False, if an IOException has occurred
 	 */
 	public boolean log(String text) {
-
+		if (dummy) {
+			System.out.println(text);
+			return true;
+		}
 		try {
 
 			Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -90,8 +101,11 @@ public class SimpleLog {
 	 * @return False, if an IOException has occurred
 	 */
 	public boolean debug(String text) {
-
 		text = "DEBUG: " + text;
+		if (dummy) {
+			System.out.println(text);
+			return true;
+		}
 
 		try {
 
@@ -120,8 +134,11 @@ public class SimpleLog {
 	 * @return False, if an IOException has occurred
 	 */
 	public boolean info(String text) {
-
 		text = "INFO: " + text;
+		if (dummy) {
+			System.out.println(text);
+			return true;
+		}
 
 		try {
 
@@ -150,8 +167,11 @@ public class SimpleLog {
 	 * @return False, if an IOException has occurred
 	 */
 	public boolean warning(String text) {
-
 		text = "WARNING: " + text;
+		if (dummy) {
+			System.out.println(text);
+			return true;
+		}
 
 		try {
 
@@ -182,6 +202,10 @@ public class SimpleLog {
 	 * @return False, if an IOException has occurred
 	 */
 	public boolean logStackTrace(Exception e) {
+		if (dummy) {
+			e.printStackTrace();
+			return true;
+		}
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
@@ -215,7 +239,10 @@ public class SimpleLog {
 	public boolean error(String text) {
 
 		text = "ERROR: " + text;
-
+		if (dummy) {
+			System.out.println(text);
+			return true;
+		}
 		try {
 
 			Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -238,7 +265,10 @@ public class SimpleLog {
 	public boolean fatal(String text) {
 
 		text = "FATAL ERROR: " + text;
-
+		if (dummy) {
+			System.out.println(text);
+			return true;
+		}
 		try {
 
 			Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -259,7 +289,10 @@ public class SimpleLog {
 	}
 
 	public boolean startupMessage(String text) {
-
+		if (dummy) {
+			System.out.println(text);
+			return true;
+		}
 		try {
 
 			Timestamp time = new Timestamp(System.currentTimeMillis());
