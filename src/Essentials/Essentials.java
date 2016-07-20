@@ -177,7 +177,7 @@ public class Essentials {
 				file.createNewFile();
 
 			FileWriter fileWriter = new FileWriter(file, true);
-			fileWriter.append(text + "\n");
+			fileWriter.append(text);
 			fileWriter.close();
 			System.out.println("Wrote '" + text + "' into '" + file.getPath()
 					+ "'");
@@ -397,10 +397,25 @@ public class Essentials {
 	 * Search for all IPs in the local network using the arp -a command. Only
 	 * works on Windows machines
 	 * 
+	 * @param includeLocalhost
+	 *            If true, the first entry will be 'localhost'
+	 * 
 	 * @return An String array containing the IPs
 	 * @throws IOException
 	 */
-	public static String[] searchIPs() throws IOException {
+	public static String[] searchIPs(boolean includeLocalhost)
+			throws IOException {
+
+		if (includeLocalhost) {
+			String[] ips = searchIPs(false);
+			String[] ips2 = new String[ips.length + 1];
+			ips2[0] = "localhost";
+			for (int i = 1; i < ips2.length; i++) {
+				ips2[i] = ips[i - 1];
+			}
+			return ips2;
+		}
+
 		String[] line = null;
 		String[] ips = null;
 		String answer = "";
