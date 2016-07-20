@@ -404,23 +404,26 @@ public class Essentials {
 		String[] line = null;
 		String[] ips = null;
 		String answer = "";
+		try {
+			Process p = Runtime.getRuntime().exec("arp -a");
+			InputStream is = p.getInputStream();
+			int c;
+			while ((c = is.read()) != -1) {
+				// System.out.print((char) c );
+				answer = answer + (char) c;
+			}
 
-		Process p = Runtime.getRuntime().exec("arp -a");
-		InputStream is = p.getInputStream();
-		int c;
-		while ((c = is.read()) != -1) {
-			// System.out.print((char) c );
-			answer = answer + (char) c;
-		}
+			line = answer.split(Pattern.quote("\n"));
+			int length = line.length;
+			String[] line2 = new String[length];
+			ips = new String[line.length - 3];
+			for (int i = 3; i < line.length; i++) {
+				line2[i - 2] = line[i];
+				ips[i - 3] = line[i].substring(0, 17).trim();
 
-		line = answer.split(Pattern.quote("\n"));
-		int length = line.length;
-		String[] line2 = new String[length];
-		ips = new String[line.length - 3];
-		for (int i = 3; i < line.length; i++) {
-			line2[i - 2] = line[i];
-			ips[i - 3] = line[i].substring(0, 17).trim();
-
+			}
+		} catch (NegativeArraySizeException e) {
+			return new String[0];
 		}
 		return ips;
 

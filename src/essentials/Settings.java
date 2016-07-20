@@ -148,8 +148,8 @@ public class Settings {
 	}
 
 	/**
-	 * Add a comment to the beginning of the File. Will only be added if you
-	 * call .setSetting afterwards or set 'updateNow' to true
+	 * Add a comment to the beginning of the file. Will only be added if you
+	 * call .setSetting() or .writeToFile() afterwards or set 'updateNow' to true
 	 * 
 	 * @param comment
 	 */
@@ -184,7 +184,7 @@ public class Settings {
 	}
 
 	/**
-	 * Set the properties object. It will be synced to the file.
+	 * Set the properties object. It will be synced to the file if you use writeToFile();
 	 * 
 	 * @param props
 	 *            The properties object ot be synced
@@ -266,11 +266,29 @@ public class Settings {
 		}
 	}
 
+	/**
+	 * Checks if a Settings object contains all the given keys
+	 * 
+	 * @param keys
+	 * @return
+	 */
 	public boolean containsKeys(String[] keys) {
 		for (String string : keys) {
 			if (!settings.containsKey(string))
 				return false;
 		}
+		return true;
+	}
+
+	/**
+	 * Check if the Settings Object contains a given key
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public boolean containsKey(String key) {
+		if (!settings.containsKey(key))
+			return false;
 		return true;
 	}
 
