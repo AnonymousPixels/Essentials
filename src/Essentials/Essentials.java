@@ -334,6 +334,7 @@ public class Essentials {
 	 * @throws IOException
 	 */
 	public static String sendHTTPRequest(URL url) throws IOException {
+		System.setProperty("http.agent", "Chrome");
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				url.openStream()));
 		String answer = "";
