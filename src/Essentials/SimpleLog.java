@@ -80,7 +80,7 @@ public class SimpleLog {
 			FileWriter out = new FileWriter(file, true);
 			if (timestamp) {
 				out.append((CharSequence) dateFormat.format(time) + " ");
-				System.out.println(dateFormat.format(time) + " ");
+				System.out.print(dateFormat.format(time) + " ");
 			}
 
 			out.append(text + "\n");
@@ -113,7 +113,7 @@ public class SimpleLog {
 			FileWriter out = new FileWriter(file, true);
 			if (timestamp) {
 				out.append((CharSequence) dateFormat.format(time) + " ");
-				System.out.println(dateFormat.format(time) + " ");
+				System.out.print(dateFormat.format(time) + " ");
 			}
 
 			out.append(text + "\n");
@@ -146,7 +146,7 @@ public class SimpleLog {
 			FileWriter out = new FileWriter(file, true);
 			if (timestamp) {
 				out.append((CharSequence) dateFormat.format(time) + " ");
-				System.out.println(dateFormat.format(time) + " ");
+				System.out.print(dateFormat.format(time) + " ");
 			}
 
 			out.append(text + "\n");
@@ -179,7 +179,7 @@ public class SimpleLog {
 			FileWriter out = new FileWriter(file, true);
 			if (timestamp) {
 				out.append((CharSequence) dateFormat.format(time) + " ");
-				System.out.println(dateFormat.format(time) + " ");
+				System.out.print(dateFormat.format(time) + " ");
 			}
 
 			out.append(text + "\n");
@@ -215,7 +215,7 @@ public class SimpleLog {
 			FileWriter out = new FileWriter(file, true);
 			if (timestamp) {
 				out.append((CharSequence) dateFormat.format(time) + " ");
-				System.out.println(dateFormat.format(time) + "  ");
+				System.out.print(dateFormat.format(time) + "  ");
 			}
 			String s = sw.toString();
 			out.append(s + "\n");
@@ -249,7 +249,7 @@ public class SimpleLog {
 			FileWriter out = new FileWriter(file, true);
 			if (timestamp) {
 				out.append((CharSequence) dateFormat.format(time) + " ");
-				System.out.println(dateFormat.format(time) + " ");
+				System.out.print(dateFormat.format(time) + " ");
 			}
 
 			out.append(text + "\n");
@@ -275,7 +275,7 @@ public class SimpleLog {
 			FileWriter out = new FileWriter(file, true);
 			if (timestamp) {
 				out.append((CharSequence) dateFormat.format(time) + " ");
-				System.out.println(dateFormat.format(time) + " ");
+				System.out.print(dateFormat.format(time) + " ");
 			}
 
 			out.append(text + "\n");
@@ -323,7 +323,6 @@ public class SimpleLog {
 			out.append("\n");
 			System.out.println("\n");
 			out.close();
-			System.out.println(text);
 
 		} catch (IOException e) {
 			return false;

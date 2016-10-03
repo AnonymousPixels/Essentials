@@ -342,6 +342,7 @@ public class Essentials {
 		while (null != (line = br.readLine())) {
 			answer = answer + line + "\n";
 		}
+		br.close();
 		return answer;
 	}
 
