@@ -22,7 +22,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -31,6 +34,8 @@ import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import com.sun.xml.internal.messaging.saaj.util.Base64;
 
 /**
  * Contains some quite useful methods.
@@ -346,6 +351,26 @@ public class Essentials {
 		return answer;
 	}
 
+	public static String sendHTTPRequest(URL url, String username,
+			String password) throws IOException {
+		System.setProperty("http.agent", "Chrome");
+		URLConnection uc = url.openConnection();
+		String userpass = username + ":" + password;
+		new Base64();
+		String basicAuth = "Basic "
+				+ new String(Base64.encode(userpass.getBytes()));
+		uc.setRequestProperty("Authorization", basicAuth);
+		InputStream in = uc.getInputStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		String answer = "";
+		String line = "";
+		while (null != (line = br.readLine())) {
+			answer = answer + line + "\n";
+		}
+		br.close();
+		return answer;
+	}
+
 	/**
 	 * Downloads a file from an URL and saves it on the computer
 	 * 
@@ -478,6 +503,27 @@ public class Essentials {
 			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
 		}
 		return new String(hexChars);
+	}
+
+	/**
+	 * Converty a string to a url by escaping illegal characters correctly
+	 * 
+	 * @param string
+	 *            The url to escape
+	 * @return The URL object
+	 */
+	public static URL escapeURL(String string) {
+		try {
+			String decodedURL = URLDecoder.decode(string, "UTF-8");
+			URL url = new URL(decodedURL);
+			URI uri = new URI(url.getProtocol(), url.getUserInfo(),
+					url.getHost(), url.getPort(), url.getPath(),
+					url.getQuery(), url.getRef());
+			return uri.toURL();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
