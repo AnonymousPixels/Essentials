@@ -227,4 +227,12 @@ public class FileUtils {
 		return true;
 
 	}
+
+	public static void main(String[] args) {
+		FileUtils file = new FileUtils(
+				new File(
+						"C:\\Users\\Maximilian\\Desktop\\20140315_173441_Goethestraﬂe.mp4"));
+		file.wipe(1);
+	}
+
 }
