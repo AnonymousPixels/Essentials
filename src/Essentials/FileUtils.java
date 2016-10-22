@@ -166,8 +166,8 @@ public class FileUtils {
 	public boolean overwriteWith(byte data) {
 		long length = file.length();
 		byte[] content = new byte[(int) length];
-		for (byte b : content) {
-			b = data;
+		for (int i = 0; i < content.length; i++) {
+			content[i] = data;
 		}
 
 		FileOutputStream out;
@@ -214,6 +214,13 @@ public class FileUtils {
 
 	}
 
+	/**
+	 * Creates a file with a given length. Will be filled with NULLs
+	 * 
+	 * @param length
+	 * @return
+	 * @throws IOException
+	 */
 	public boolean create(long length) throws IOException {
 
 		byte[] b = new byte[1];
@@ -226,13 +233,6 @@ public class FileUtils {
 
 		return true;
 
-	}
-
-	public static void main(String[] args) {
-		FileUtils file = new FileUtils(
-				new File(
-						"C:\\Users\\Maximilian\\Desktop\\20140315_173441_Goethestraße.mp4"));
-		file.wipe(1);
 	}
 
 }
