@@ -51,35 +51,40 @@ public class Essentials {
 																				// needs
 
 	/**
-	 * Adds a component to a container using the GridBagLayout.
+	 * Adds a <code>Component</code> to a <code>container</code> using the
+	 * <code>GridBagLayout</code>.
 	 * 
 	 * @param container
-	 *            Container to which the component will be added
+	 *            <code>Container</code> to which the <code>Component</code>
+	 *            will be added
 	 * @param layout
-	 *            Used GridBagLayout object
+	 *            Used <code>GridBagLayout</code> object
 	 * @param component
-	 *            Component which will be added to the container
+	 *            <code>Component</code> which will be added to the
+	 *            <code>Container</code>
 	 * @param x
-	 *            x coordinate of the component in the grid
+	 *            x coordinate of the <code>Component</code> in the grid
 	 * @param y
-	 *            y coordinate of the component in the grid
+	 *            y coordinate of the <code>Component</code> in the grid
 	 * @param width
-	 *            width of the component
+	 *            width of the <code>Component</code>
 	 * @param height
-	 *            height of the component
+	 *            height of the <code>Component</code>
 	 * @param weightx
-	 *            x weighting of the component
+	 *            x weight of the <code>Component</code>
 	 * @param weighty
-	 *            y weighting of the component
+	 *            y weight of the <code>component</code>
 	 * @param insets
-	 *            insets object which declares the distances around the
-	 *            component
-	 * @return boolean if false, exception occurred
+	 *            <code>Insets</code> which defines the distances around the
+	 *            <code>Component</code>
+	 * @return boolean false if exception occurred
 	 */
 	public static boolean addComponent(Container container,
 			GridBagLayout layout, Component component, int x, int y, int width,
 			int height, double weightx, double weighty, Insets insets) {
 
+		if (insets == null)
+			insets = new Insets(0, 0, 0, 0);
 		try {
 
 			GridBagConstraints constraints = new GridBagConstraints();
@@ -101,11 +106,12 @@ public class Essentials {
 	}
 
 	/**
-	 * Returns a Object[] that contains the keys of the given HashMap.
+	 * Returns a <code>Object[]</code> that contains the keys of the given
+	 * <code>HashMap</code>.
 	 * 
 	 * @param hashmap
-	 *            HashMap<String, Object> object
-	 * @return Object[] which contains HashMap data
+	 *            <code>HashMap<String, Object></code>
+	 * @return <code>Object[]</code> which contains HashMap data
 	 */
 	public static Object[] getHashMapObjects(HashMap<Object, Object> hashmap) {
 
@@ -124,15 +130,15 @@ public class Essentials {
 	}
 
 	/**
-	 * Writes a string (with a timestamp) to a file.
+	 * Writes a <code>String</code> (with a timestamp) to a <code>File</code>.
 	 * 
-	 * @deprecated {@link SimpleLog} handles this much more comfortable and
+	 * @deprecated {@link SimpleLog} handles this much more comfortably and
 	 *             professionally
 	 * 
 	 * @param text
-	 *            The String, that will be written to the file
+	 *            The <code>String</code>, that will be written to the file
 	 * @param file
-	 *            The file where the text will be saved to
+	 *            The <code>File</code> where the text will be saved to
 	 * @param printTimestamp
 	 *            If true, there will be a timestamp in front of the text
 	 * @return boolean if false, exception occurred
@@ -166,13 +172,14 @@ public class Essentials {
 	}
 
 	/**
-	 * Writes a String to the end of a file.
+	 * Writes a <code>String</code> to the end of a <code>File</code>.
 	 * 
 	 * @param text
-	 *            The String, that will be written to the file
+	 *            The <code>String</code>, that will be written to the
+	 *            <code>File</code>
 	 * @param file
-	 *            The file that should be written to
-	 * @return boolean if false, exception occurred
+	 *            The <code>File</code> that should be written to
+	 * @return boolean false, exception occurred
 	 */
 	public static boolean printStringToFile(String text, File file) {
 
@@ -194,10 +201,10 @@ public class Essentials {
 	}
 
 	/**
-	 * Reads a given file and returns the text
+	 * Reads a given <code>File</code> and returns the text
 	 * 
 	 * @param file
-	 *            The file to read
+	 *            The <code>File</code> to read
 	 * 
 	 * @return The content of the file
 	 */
@@ -223,10 +230,11 @@ public class Essentials {
 	}
 
 	/**
-	 * Counts the number of lines in the given file.
+	 * Counts the number of lines in the given <code>File</code>. Empty lines
+	 * will be skipped
 	 * 
 	 * @param file
-	 *            The file, which lines will be counted
+	 *            The <code>File</code>to count the lines of
 	 * @return amount of lines
 	 * @throws IOException
 	 */
@@ -252,12 +260,12 @@ public class Essentials {
 	}
 
 	/**
-	 * Puts files in an uncompressed .zip folder
+	 * Put files in an uncompressed .zip archive
 	 * 
 	 * @param zipFile
-	 *            The target zip-folder
+	 *            The target zip-archive
 	 * @param containingFiles
-	 *            The files to put in the zip-folder
+	 *            The files to put in the zip-archive
 	 * @throws IOException
 	 */
 	public static boolean zip(File zipFile, File[] containingFiles)
@@ -303,12 +311,12 @@ public class Essentials {
 	}
 
 	/**
-	 * Puts files in a .zip folder and compresses them
+	 * Puts files in a .zip archive and compresses them
 	 * 
 	 * @param files
-	 *            The files to put into the zip-file
+	 *            The files to put into the zip-archive
 	 * @param target
-	 *            The path of the target zip-file
+	 *            The path of the target zip-archive
 	 * @throws IOException
 	 */
 	public static void zipAndCompress(String target, String[] files)
@@ -331,11 +339,12 @@ public class Essentials {
 	}
 
 	/**
-	 * A method to send HTTP requests to a Webserver and fetch the answer
+	 * Send HTTP requests to a webserver and fetch the answer. Will send
+	 * <code>http.agent=Chrome</code>
 	 * 
 	 * @param url
-	 *            The URL you want to send a request to
-	 * @return The answer from that URL
+	 *            The <code>URL</code> you want to send a request to
+	 * @return The answer from that <code>URL</code>
 	 * @throws IOException
 	 */
 	public static String sendHTTPRequest(URL url) throws IOException {
@@ -351,6 +360,10 @@ public class Essentials {
 		return answer;
 	}
 
+	/**
+	 * Send a HTTP-Request to a webserver and fetch the answer. Uses basic
+	 * .htaccess authentication. Will send <code>http.agent=Chrome</code
+	 */
 	public static String sendHTTPRequest(URL url, String username,
 			String password) throws IOException {
 		System.setProperty("http.agent", "Chrome");
@@ -372,12 +385,13 @@ public class Essentials {
 	}
 
 	/**
-	 * Downloads a file from an URL and saves it on the computer
+	 * Downloads a <code>File</code> from an <code>URL</code> and saves it to
+	 * the computer
 	 * 
 	 * @param url
-	 *            The URL of the file
+	 *            The <code>URL</code> of the <code>File</code>
 	 * @param saveFile
-	 *            The path where the file should be saved
+	 *            The path where the <code>File</code> should be saved
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */
@@ -385,13 +399,10 @@ public class Essentials {
 			throws IOException, FileNotFoundException {
 
 		HttpURLConnection c;
-
 		c = (HttpURLConnection) url.openConnection();
-
 		c.connect();
 
 		BufferedInputStream in = new BufferedInputStream(c.getInputStream());
-
 		OutputStream out = new BufferedOutputStream(new FileOutputStream(
 				saveFile));
 		byte[] buf = new byte[256];
@@ -406,7 +417,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Copies a BufferedImage
+	 * Copies a <code>BufferedImage</code>
 	 * 
 	 * @param image
 	 *            The image that should be copied
@@ -421,13 +432,13 @@ public class Essentials {
 	}
 
 	/**
-	 * Search for all IPs in the local network using the arp -a command. Only
-	 * works on Windows machines
+	 * Search for all IPs on the local network using the <code>arp -a</code>
+	 * command. Works only on Windows machines
 	 * 
 	 * @param includeLocalhost
 	 *            If true, the first entry will be 'localhost'
 	 * 
-	 * @return An String array containing the IPs
+	 * @return A <code>String[]</code> containing the IPs
 	 * @throws IOException
 	 */
 	public static String[] searchIPs(boolean includeLocalhost)
@@ -472,8 +483,8 @@ public class Essentials {
 	}
 
 	/**
-	 * Assembles a String array to one String, in which the parts are separated
-	 * by blanks
+	 * Assembles a <code>String[]</code> to one <code>String</code>, in which
+	 * the parts are separated by blanks
 	 * 
 	 * @param array
 	 *            The String array that will be assembled
@@ -489,7 +500,8 @@ public class Essentials {
 	}
 
 	/**
-	 * Represents a byte array in a much more comfortable an readable way
+	 * Represents a <code>byte[]</code> in a much more comfortable an readable
+	 * way
 	 * 
 	 * @param bytes
 	 *            the bytes you want to convert
@@ -506,7 +518,9 @@ public class Essentials {
 	}
 
 	/**
-	 * Converty a string to a url by escaping illegal characters correctly
+	 * Convert a <code>String</code> to an <code>URL</code> by escaping illegal
+	 * characters correctly. <code>URLEndocer.encode();</code> is probably
+	 * better, but it is somehow deprecated
 	 * 
 	 * @param string
 	 *            The url to escape
@@ -527,7 +541,7 @@ public class Essentials {
 	}
 
 	/**
-	 * Checks if a string is included in a string array
+	 * Checks if a <code>String</code> is included in a <code>String[]</code> *
 	 * 
 	 * @param array
 	 *            String array
@@ -535,7 +549,7 @@ public class Essentials {
 	 *            String
 	 * @return true if included, false if not
 	 */
-	public static boolean included(String[] array, String string) {
+	public static boolean isIncluded(String[] array, String string) {
 
 		for (String s : array) {
 			if (s.equals(string))
