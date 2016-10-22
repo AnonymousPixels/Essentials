@@ -304,7 +304,7 @@ public class Security {
 	 * C drive, the motherboard and the processor identifier.
 	 * <p>
 	 * The return value will be a 64 character long string that represents a
-	 * SHA-256 {@link hash}.
+	 * SHA-256 hash.
 	 * <p>
 	 * DO NOT use it for stuff like hardware-banning because it is easy to mount
 	 * drives to other letters or to change your MAC address. What you can do is
@@ -327,7 +327,4 @@ public class Security {
 
 	}
 
-	public static void main(String[] args) {
-		System.out.println(getHWID(false));
-	}
 }
