@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 /**
  * A simple class for a simple log
  * 
- * @version 1.0
+ * @version 2.0
  * @author Maximilian von Gaisberg
  * @author Felix Beutter
  *
@@ -262,6 +262,13 @@ public class SimpleLog {
 		return true;
 	}
 
+	/**
+	 * Add a new fatal error entry to the logfile
+	 * 
+	 * @param text
+	 *            The String, that will be written into the log file
+	 * @return False, if an IOException has occurred
+	 */
 	public boolean fatal(String text) {
 
 		text = "FATAL ERROR: " + text;
@@ -288,6 +295,19 @@ public class SimpleLog {
 		return true;
 	}
 
+	/**
+	 * Print a startup message to the file. Will look like <br>
+	 * <code>=========================<br>
+	 * Starting Aboerfolg-Bot...<br>
+	 * 01.10.2016_11:18:19<br>
+	 * ========================= </code>
+	 * 
+	 * <br>
+	 * The timestamp will be centered in the box
+	 * 
+	 * @param text
+	 *            The startup message
+	 */
 	public boolean startupMessage(String text) {
 		if (dummy) {
 			System.out.println(text);
