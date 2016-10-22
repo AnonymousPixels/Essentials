@@ -110,7 +110,7 @@ public class Essentials {
 	 * <code>HashMap</code>.
 	 * 
 	 * @param hashmap
-	 *            <code>HashMap<String, Object></code>
+	 *            <code>HashMap&lt;String, Object&gt;</code>
 	 * @return <code>Object[]</code> which contains HashMap data
 	 */
 	public static Object[] getHashMapObjects(HashMap<Object, Object> hashmap) {
@@ -207,7 +207,10 @@ public class Essentials {
 	 *            The <code>File</code> to read
 	 * 
 	 * @return The content of the file
+	 * @throws IOException
+	 *             if file isn't found or can't be read
 	 */
+
 	public static String readFile(File file) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(
 				file.getAbsolutePath()));
@@ -234,9 +237,10 @@ public class Essentials {
 	 * will be skipped
 	 * 
 	 * @param file
-	 *            The <code>File</code>to count the lines of
+	 *            The <code>File</code> to count the lines of
 	 * @return amount of lines
 	 * @throws IOException
+	 *             if file is not found or can't be read
 	 */
 	public static int countFileLines(File file) throws IOException {
 		InputStream is = new BufferedInputStream(new FileInputStream(file));
@@ -266,8 +270,11 @@ public class Essentials {
 	 *            The target zip-archive
 	 * @param containingFiles
 	 *            The files to put in the zip-archive
+	 * @return success
 	 * @throws IOException
+	 *             if files aren't found or can't be written to
 	 */
+
 	public static boolean zip(File zipFile, File[] containingFiles)
 			throws IOException {
 
@@ -318,6 +325,7 @@ public class Essentials {
 	 * @param target
 	 *            The path of the target zip-archive
 	 * @throws IOException
+	 *             if files aren't found or can't be written to
 	 */
 	public static void zipAndCompress(String target, String[] files)
 			throws IOException {
@@ -346,6 +354,7 @@ public class Essentials {
 	 *            The <code>URL</code> you want to send a request to
 	 * @return The answer from that <code>URL</code>
 	 * @throws IOException
+	 *             if connection failed
 	 */
 	public static String sendHTTPRequest(URL url) throws IOException {
 		System.setProperty("http.agent", "Chrome");
@@ -362,7 +371,17 @@ public class Essentials {
 
 	/**
 	 * Send a HTTP-Request to a webserver and fetch the answer. Uses basic
-	 * .htaccess authentication. Will send <code>http.agent=Chrome</code
+	 * .htaccess authentication. Will send <code>http.agent=Chrome</code>
+	 *
+	 * @param url
+	 *            The <code>URL</code> you want to send a request to
+	 * @param username
+	 *            The username to send
+	 * @param password
+	 *            The password to send
+	 * @return The answer from that <code>URL</code>
+	 * @throws IOException
+	 *             if connection failed
 	 */
 	public static String sendHTTPRequest(URL url, String username,
 			String password) throws IOException {
@@ -392,8 +411,11 @@ public class Essentials {
 	 *            The <code>URL</code> of the <code>File</code>
 	 * @param saveFile
 	 *            The path where the <code>File</code> should be saved
+	 * @return success
 	 * @throws IOException
+	 *             if HTTP error code is returned
 	 * @throws FileNotFoundException
+	 *             if file has not be found
 	 */
 	public static boolean downloadFileFromURL(URL url, File saveFile)
 			throws IOException, FileNotFoundException {
@@ -422,7 +444,7 @@ public class Essentials {
 	 * @param image
 	 *            The image that should be copied
 	 * 
-	 * @returns The copied image
+	 * @return The copied image
 	 */
 	public static BufferedImage copyBufferedImage(BufferedImage image) {
 		ColorModel cm = image.getColorModel();
@@ -440,6 +462,7 @@ public class Essentials {
 	 * 
 	 * @return A <code>String[]</code> containing the IPs
 	 * @throws IOException
+	 *             if command can not be executed
 	 */
 	public static String[] searchIPs(boolean includeLocalhost)
 			throws IOException {
