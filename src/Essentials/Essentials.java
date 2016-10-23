@@ -51,7 +51,7 @@ public class Essentials {
 																				// needs
 
 	/**
-	 * Adds a <code>Component</code> to a <code>container</code> using the
+	 * Adds a <code>Component</code> to a <code>Container</code> using the
 	 * <code>GridBagLayout</code>.
 	 * 
 	 * @param container

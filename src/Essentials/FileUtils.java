@@ -39,7 +39,7 @@ public class FileUtils {
 	 * 
 	 * @param times
 	 *            Number of iterations
-	 * @throws IOException
+	 * @return success
 	 */
 
 	public boolean shred(int times) {
@@ -80,6 +80,7 @@ public class FileUtils {
 	 * 
 	 * @param times
 	 *            Number of iterations
+	 * @return success
 	 */
 	public boolean wipe(int times) {
 		for (int i = 0; i < times; i++) {
@@ -113,7 +114,7 @@ public class FileUtils {
 	 * @param howLong
 	 *            How long the file should burn. 1 will burn approximately half
 	 *            the file.
-	 * 
+	 * @return success
 	 */
 	public boolean burn(float howLong) {
 		try {
@@ -136,6 +137,8 @@ public class FileUtils {
 
 	/**
 	 * Deletes a file in the normal way. Insecure! Use secureDelete()!
+	 * 
+	 * @return success
 	 */
 	public boolean delete() {
 		if (!file.exists()) {
@@ -161,7 +164,7 @@ public class FileUtils {
 	 * 
 	 * @param data
 	 *            The data to write in the file
-	 * 
+	 * @return success *
 	 */
 	public boolean overwriteWith(byte data) {
 		long length = file.length();
@@ -218,8 +221,10 @@ public class FileUtils {
 	 * Creates a file with a given length. Will be filled with NULLs
 	 * 
 	 * @param length
-	 * @return
+	 *            The length in bytes of the file
+	 * @return success
 	 * @throws IOException
+	 *             if file can't be created
 	 */
 	public boolean create(long length) throws IOException {
 

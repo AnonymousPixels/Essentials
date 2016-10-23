@@ -27,12 +27,11 @@ public class SimpleLog {
 	 * Constructor of 'Log' class, which creates the log file
 	 * 
 	 * @param file
-	 *            The File where the Log should be saved to
+	 *            The <code>File</code> where the Log should be saved to
 	 * @param useSameFile
 	 *            If false, there will be a new file for every launch
-	 * @param timestamp
+	 * @param useTimestamp
 	 *            If true, there will be a timestamp in front of every entry
-	 * @throws IOException
 	 */
 	public SimpleLog(File file, boolean useSameFile, boolean useTimestamp) {
 
@@ -307,6 +306,7 @@ public class SimpleLog {
 	 * 
 	 * @param text
 	 *            The startup message
+	 * @return success
 	 */
 	public boolean startupMessage(String text) {
 		if (dummy) {

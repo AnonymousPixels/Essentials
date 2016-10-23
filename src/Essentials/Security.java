@@ -182,7 +182,7 @@ public class Security {
 	 * 
 	 * @param drive
 	 *            The drive to use
-	 * @return
+	 * @return the serial number of the drive
 	 */
 	public static String getDriveSN(String drive) {
 		String result = "";
@@ -217,7 +217,7 @@ public class Security {
 	/**
 	 * Returns the serial number of your Motherboard
 	 * 
-	 * @return
+	 * @return the serial number of the MOtherboard
 	 */
 	public static String getMotherboardSN() {
 		String result = "";
@@ -282,7 +282,8 @@ public class Security {
 	 * Returns the SHA-256 hash of a given string
 	 * 
 	 * @param data
-	 * @return
+	 *            the <code>String</code> to be hashed
+	 * @return the hash of the <code>String</code>
 	 */
 	public static byte[] hash(String data) {
 		MessageDigest messageDigest;

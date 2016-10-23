@@ -104,7 +104,7 @@ public class Settings {
 	 * 
 	 * @param key
 	 *            The key of the value that should be read in
-	 * @return
+	 * @return The value of the given setting
 	 */
 	public String getSetting(String key) {
 		return settings.getProperty(key);
@@ -138,7 +138,8 @@ public class Settings {
 	 * whitespace characters
 	 * 
 	 * @param key
-	 * @return
+	 *            The key that represents the value
+	 * @return The <code>String[]</code> that was stored in the Settings file
 	 */
 	public String[] getArray(String key) {
 
@@ -149,9 +150,15 @@ public class Settings {
 
 	/**
 	 * Add a comment to the beginning of the file. Will only be added if you
-	 * call .setSetting() or .writeToFile() afterwards or set 'updateNow' to true
+	 * call .setSetting() or .writeToFile() afterwards or set 'updateNow' to
+	 * true
 	 * 
 	 * @param comment
+	 *            The comment that should be written in the head of the file
+	 * @param updateNow
+	 *            if <code>true</code>, the comment will be written to the file
+	 *            right now
+	 * @return success
 	 */
 	public boolean setComment(String comment, boolean updateNow) {
 		this.comment = comment;
@@ -177,14 +184,15 @@ public class Settings {
 	 * Get the properties object. If you modify values in this object it won't
 	 * be automatically synced to the file. Use .writeToFile() to do so
 	 * 
-	 * @return
+	 * @return The <code>Properties</code> object
 	 */
 	public Properties getProperties() {
 		return settings;
 	}
 
 	/**
-	 * Set the properties object. It will be synced to the file if you use writeToFile();
+	 * Set the properties object. It will be synced to the file if you use
+	 * writeToFile();
 	 * 
 	 * @param props
 	 *            The properties object ot be synced
@@ -195,6 +203,8 @@ public class Settings {
 
 	/**
 	 * Sync all values to the file. Not necessary if you use .setSetting()
+	 * 
+	 * @return success
 	 */
 	public boolean writeToFile() {
 		try {
@@ -270,7 +280,9 @@ public class Settings {
 	 * Checks if a Settings object contains all the given keys
 	 * 
 	 * @param keys
-	 * @return
+	 *            The keys to check for
+	 * @return <code>true</code> if all of them are in the <code>Settings</code>
+	 *         object
 	 */
 	public boolean containsKeys(String[] keys) {
 		for (String string : keys) {
@@ -284,7 +296,9 @@ public class Settings {
 	 * Check if the Settings Object contains a given key
 	 * 
 	 * @param key
-	 * @return
+	 *            The key to check for
+	 * 
+	 * @return <code>true</code> if the key is present
 	 */
 	public boolean containsKey(String key) {
 		if (!settings.containsKey(key))
