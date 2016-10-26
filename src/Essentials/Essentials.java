@@ -52,7 +52,7 @@ public class Essentials {
 
 	/**
 	 * Adds a <code>Component</code> to a <code>Container</code> using the
-	 * <code>GridBagLayout</code>.
+	 * {@link GridBagLayout}.
 	 * 
 	 * @param container
 	 *            <code>Container</code> to which the <code>Component</code>
