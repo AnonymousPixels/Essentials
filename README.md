@@ -12,6 +12,6 @@ Methods for encryting stuff, hashing stuff or getting a HWID of the computer
 * **WinRegistry**
 Not my code. But useful for accessing the Windows Registry
 
-[JavaDoc for Essentials](https://grunzwanzling.github.io/Essentials/)
+[JavaDoc for Essentials](http://grunzwanzling.me/Essentials/)
 
-[Homepage of Grunzwanzling](https://grunzwanzling.github.io)
+[Homepage of Grunzwanzling](http://grunzwanzling.me)
