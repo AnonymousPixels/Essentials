@@ -39,9 +39,9 @@ import com.sun.xml.internal.messaging.saaj.util.Base64;
 
 /**
  * Contains some quite useful methods. <a
- * href="htps://grunzwanzling.github.io/essentials/">Javadoc Website</a>
+ * href="http://grunzwanzling.me/Essentials/">Javadoc Website</a>
  * 
- * @author <a href="https://grunzwanzling.github.io">Maximilian von Gaisberg
+ * @author <a href="http://grunzwanzling.me">Maximilian von Gaisberg
  *         (Grunzwanzling)</a>
  * @author Felix Beutter
  * 
