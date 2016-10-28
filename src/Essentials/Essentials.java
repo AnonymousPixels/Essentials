@@ -38,8 +38,9 @@ import java.util.zip.ZipOutputStream;
 import com.sun.xml.internal.messaging.saaj.util.Base64;
 
 /**
- * Contains some quite useful methods. <a
- * href="http://grunzwanzling.me/Essentials/">Javadoc Website</a>
+ * Contains some quite useful methods.
+ * 
+ * @see <a href="http://grunzwanzling.me/Essentials/">Javadoc Website</a>
  * 
  * @author <a href="http://grunzwanzling.me">Maximilian von Gaisberg
  *         (Grunzwanzling)</a>
