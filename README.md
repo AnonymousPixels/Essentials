@@ -14,4 +14,4 @@ Not my code. But useful for accessing the Windows Registry
 
 [JavaDoc for Essentials](http://grunzwanzling.me/Essentials/)
 
-[Homepage of Grunzwanzling](http://grunzwanzling.me)
+[Homepage of Maximilian von Gaisberg (Grunzwanzling)](http://grunzwanzling.me)
