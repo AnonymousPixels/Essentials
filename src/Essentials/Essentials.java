@@ -408,6 +408,38 @@ public class Essentials {
 	}
 
 	/**
+	 * Send HTTP requests to a webserver and fetch the answer including a
+	 * cookie. Mainly used to login to sites. Will send
+	 * <code>http.agent=Chrome</code>
+	 * 
+	 * @param url
+	 *            The <code>URL</code> you want to send a request to
+	 * @param cookie
+	 *            The cookie represented as a string:
+	 *            <code>"name1=value1; name2=value2; name3=value3"</code>
+	 * @return The answer from that <code>URL</code>
+	 * @throws IOException
+	 *             if connection failed
+	 */
+	public static String sendHTTPRequest(URL url, String cookie)
+			throws IOException {
+		System.setProperty("http.agent", "Chrome");
+		HttpURLConnection uc = (HttpURLConnection) url.openConnection();
+		uc.setRequestMethod("GET");
+		uc.setRequestProperty("Connection", "Keep-Alive");
+		uc.setRequestProperty("Cookie", cookie);
+		InputStream in = uc.getInputStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		String answer = "";
+		String line = "";
+		while (null != (line = br.readLine())) {
+			answer = answer + line + "\n";
+		}
+		br.close();
+		return answer;
+	}
+
+	/**
 	 * Downloads a <code>File</code> from an <code>URL</code> and saves it to
 	 * the computer
 	 * 
