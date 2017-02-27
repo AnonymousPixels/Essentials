@@ -19,8 +19,6 @@ import javax.swing.UIManager;
  * @author Maximilian von Gaisberg
  */
 
-
-
 public class EnhancedOptionPane extends JOptionPane {
 	
 	private static final long serialVersionUID = -444186248294917230L;
