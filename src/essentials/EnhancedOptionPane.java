@@ -10,10 +10,21 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
- * @author Maximilian
+ * 
  *
+ * A slightly changed version of EnhancedOptionPane which has changeable button
+ * texts. <br><br>Example:
+ * <code>JEnhancedOptionPane.showInputDialog("Number:", new Object[]{"Yes", "No"});</code>
+ *
+ * @author Maximilian von Gaisberg
  */
+
+
+
 public class EnhancedOptionPane extends JOptionPane {
+	
+	private static final long serialVersionUID = -444186248294917230L;
+
 	public static String showInputDialog(final Object message,
 			final Object[] options) throws HeadlessException {
 		final JOptionPane pane = new JOptionPane(message, QUESTION_MESSAGE,
