@@ -41,10 +41,16 @@ public class Settings {
 
 	public Settings(File file, Properties defaultValues, boolean useXML,
 			SimpleLog log) {
-		this.defaultValues = defaultValues;
+		if (defaultValues == null)
+			this.defaultValues = new Properties();
+		else
+			this.defaultValues = defaultValues;
 		this.file = file;
 		this.useXML = useXML;
-		this.log = log;
+		if (log == null)
+			this.log = new SimpleLog();
+		else
+			this.log = log;
 
 		filename = file.getName();
 		log.debug("Reading " + filename);
