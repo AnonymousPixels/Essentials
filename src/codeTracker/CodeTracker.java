@@ -1,6 +1,3 @@
-/**
- * 
- */
 package codeTracker;
 
 import java.io.BufferedReader;
@@ -20,24 +17,15 @@ import essentials.Security;
  * @author Maximilian
  *
  */
-public class Test {
+public class CodeTracker {
 
-	/**
-	 * 
-	 */
-	public Test() {
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		String user = Security.getHWID(false);
+		System.out.println(user);
 		sendInfo(user, "test", "test", "1");
 	}
 
-	static void sendInfo(String user, String info, String program, String ver) {
+	public static void sendInfo(String user, String info, String program, String ver) {
 		try {
 
 			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
@@ -46,12 +34,12 @@ public class Test {
 				}
 
 				public void checkClientTrusted(
-						java.security.cert.X509Certificate[] certs,
+						java.security.cert.X509Certificate[] cs,
 						String authType) {
 				}
 
 				public void checkServerTrusted(
-						java.security.cert.X509Certificate[] certs,
+						java.security.cert.X509Certificate[] cs,
 						String authType) {
 				}
 			} };
@@ -65,7 +53,7 @@ public class Test {
 
 			URL url = new URL(
 					"https://grunzwanzling.me/addons/addon-tracker.php?pid="
-							+ program + "&ver=" + ver + "&usr=" + user
+							+ program + "&ver=" + ver + "&user=" + user
 							+ "&inf=" + info + "&typ=p");
 			System.out.println(url);
 			// Essentials.sendHTTPRequest();

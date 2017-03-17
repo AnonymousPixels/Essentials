@@ -1,6 +1,3 @@
-/**
- * 
- */
 package essentials;
 
 import java.io.BufferedReader;
@@ -89,9 +86,7 @@ public class Security {
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
-			byte[] inputBytes = input.getBytes();
-
-			outputBytes = cipher.doFinal(inputBytes);
+			outputBytes = cipher.doFinal(input.getBytes());
 
 		} catch (NoSuchPaddingException | NoSuchAlgorithmException
 				| InvalidKeyException | BadPaddingException
@@ -100,7 +95,7 @@ public class Security {
 			return "";
 		}
 
-		return new String(outputBytes);
+		return String.valueOf(outputBytes);
 
 	}
 
@@ -162,9 +157,7 @@ public class Security {
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
-			byte[] inputBytes = input.getBytes();
-
-			outputBytes = cipher.doFinal(inputBytes);
+			outputBytes = cipher.doFinal(input.getBytes());
 
 		} catch (NoSuchPaddingException | NoSuchAlgorithmException
 				| InvalidKeyException | BadPaddingException
@@ -173,7 +166,7 @@ public class Security {
 			return "";
 		}
 
-		return new String(outputBytes);
+		return String.valueOf(outputBytes);
 
 	}
 
@@ -191,22 +184,15 @@ public class Security {
 			file.deleteOnExit();
 			FileWriter fw = new java.io.FileWriter(file);
 
-			String vbs = "Set objFSO = CreateObject(\"Scripting.FileSystemObject\")\n"
-					+ "Set colDrives = objFSO.Drives\n"
-					+ "Set objDrive = colDrives.item(\""
-					+ drive
-					+ "\")\n"
-					+ "Wscript.Echo objDrive.SerialNumber"; // see note
-			fw.write(vbs);
+			fw.write("Set objFSO = CreateObject(\"Scripting.FileSystemObject\")\n" + "Set colDrives = objFSO.Drives\n"
+					+ "Set objDrive = colDrives.item(\"" + drive + "\")\n" + "Wscript.Echo objDrive.SerialNumber");
 			fw.close();
 			Process p = Runtime.getRuntime().exec(
 					"cscript //NoLogo " + file.getPath());
 			BufferedReader input = new BufferedReader(new InputStreamReader(
 					p.getInputStream()));
-			String line;
-			while ((line = input.readLine()) != null) {
+			for (String line = input.readLine(); line != null;)
 				result += line;
-			}
 			input.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -226,23 +212,17 @@ public class Security {
 			file.deleteOnExit();
 			FileWriter fw = new java.io.FileWriter(file);
 
-			String vbs = "Set objWMIService = GetObject(\"winmgmts:\\\\.\\root\\cimv2\")\n"
-					+ "Set colItems = objWMIService.ExecQuery _ \n"
-					+ "   (\"Select * from Win32_BaseBoard\") \n"
-					+ "For Each objItem in colItems \n"
-					+ "    Wscript.Echo objItem.SerialNumber \n"
-					+ "    exit for  ' do the first cpu only! \n" + "Next \n";
-
-			fw.write(vbs);
+			fw.write("Set objWMIService = GetObject(\"winmgmts:\\\\.\\root\\cimv2\")\n"
+					+ "Set colItems = objWMIService.ExecQuery _ \n" + "   (\"Select * from Win32_BaseBoard\") \n"
+					+ "For Each objItem in colItems \n" + "    Wscript.Echo objItem.SerialNumber \n"
+					+ "    exit for  ' do the first cpu only! \n" + "Next \n");
 			fw.close();
 			Process p = Runtime.getRuntime().exec(
 					"cscript //NoLogo " + file.getPath());
 			BufferedReader input = new BufferedReader(new InputStreamReader(
 					p.getInputStream()));
-			String line;
-			while ((line = input.readLine()) != null) {
+			for (String line = input.readLine(); line != null;)
 				result += line;
-			}
 			input.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -261,15 +241,11 @@ public class Security {
 		try {
 			ip = InetAddress.getLocalHost();
 
-			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
-
-			byte[] mac = network.getHardwareAddress();
+			byte[] mac = NetworkInterface.getByInetAddress(ip).getHardwareAddress();
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < mac.length; i++) {
-				sb.append(String.format("%02X%s", mac[i],
-						(i < mac.length - 1) ? "-" : ""));
-			}
-			return sb.toString();
+			for (int i = 0; i < mac.length; ++i)
+				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+			return sb + "";
 		} catch (UnknownHostException | SocketException e) {
 			System.out.println("Can't get MAC address");
 			e.printStackTrace();
@@ -320,11 +296,9 @@ public class Security {
 	 * @return The HWID
 	 */
 	public static String getHWID(boolean useMac) {
-		String data = getMotherboardSN() + " " + getDriveSN("C") + " "
-				+ System.getenv("PROCESSOR_IDENTIFIER");
-		data += (useMac ? getMac() : "");
-		byte[] bytes = hash(data);
-		return Essentials.bytesToHex(bytes);
+		return Essentials.bytesToHex(
+				hash(getMotherboardSN() + " " + getDriveSN("C") + " " + System.getenv("PROCESSOR_IDENTIFIER")
+						+ (!useMac ? "" : getMac())));
 
 	}
 

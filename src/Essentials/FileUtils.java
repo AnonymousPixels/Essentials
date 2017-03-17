@@ -1,9 +1,3 @@
-/**
- * 
- */
-/**
- * 
- */
 package essentials;
 
 import java.io.File;
@@ -43,22 +37,16 @@ public class FileUtils {
 	 */
 
 	public boolean shred(int times) {
-		long totalBytes = file.length();
-		long shreddedBytes = 0;
-		int length = 0;
-		while (totalBytes > shreddedBytes) {
-			if ((totalBytes - shreddedBytes) <= (2 ^ 31)) {
+		long totalBytes = file.length(), shreddedBytes = 0;
+		for (int length = 0; totalBytes > shreddedBytes;) {
+			if ((totalBytes - shreddedBytes) <= (2 ^ 31))
 				length = (int) (totalBytes - shreddedBytes);
-
-			}
 			length = (2 ^ 31);
 			shreddedBytes += length;
 			byte[] content = new byte[(int) length];
 			FileOutputStream out;
-			for (int i = 0; i < times; i++) {
-
+			for (int i = 0; i < times; ++i) {
 				rand.nextBytes(content);
-
 				try {
 					out = new FileOutputStream(file);
 					out.write(content);
@@ -83,27 +71,24 @@ public class FileUtils {
 	 * @return success
 	 */
 	public boolean wipe(int times) {
-		for (int i = 0; i < times; i++) {
+		for (int i = 0; i < times; ++i)
 			try {
 				RandomAccessFile rwFile = new RandomAccessFile(file, "rw");
 				try {
 					FileChannel rwChannel = rwFile.getChannel();
 					int numBytes = (int) rwChannel.size();
-					MappedByteBuffer buffer = rwChannel.map(
-							FileChannel.MapMode.READ_WRITE, 0, numBytes);
+					MappedByteBuffer buffer = rwChannel.map(FileChannel.MapMode.READ_WRITE, 0, numBytes);
 					buffer.clear();
 					byte[] randomBytes = new byte[numBytes];
 					rand.nextBytes(randomBytes);
 					buffer.put(randomBytes);
 					buffer.force();
-					// will already write to the disk
 				} finally {
 					rwFile.close();
 				}
 			} catch (Exception e) {
 				return false;
 			}
-		}
 		return true;
 	}
 
@@ -119,8 +104,8 @@ public class FileUtils {
 	public boolean burn(float howLong) {
 		try {
 			RandomAccessFile raf = new RandomAccessFile(file.getPath(), "rw");
-			for (int i = 0; i < (int) (raf.length() * howLong); i++) {
-				raf.seek((int) (Math.random() * ((raf.length()) + 1)));
+			for (int i = 0; i < (int) (howLong * raf.length()); ++i) {
+				raf.seek((int) (Math.random() * (raf.length() + 1)));
 				byte[] b = new byte[1];
 				rand.nextBytes(b);
 				raf.write(b);
@@ -141,19 +126,16 @@ public class FileUtils {
 	 * @return success
 	 */
 	public boolean delete() {
-		if (!file.exists()) {
+		if (!file.exists())
 			return true;
-		}
 
 		if (!file.isDirectory())
 			return file.delete();
 
 		String[] list = file.list();
-		for (int i = 0; i < list.length; i++) {
-			if (!new FileUtils(new File(file.getPath() + File.separator
-					+ list[i])).delete())
+		for (int i = 0; i < list.length; ++i)
+			if (!new FileUtils(new File(file.getPath() + File.separator + list[i])).delete())
 				return false;
-		}
 
 		return file.delete();
 	}
@@ -169,9 +151,8 @@ public class FileUtils {
 	public boolean overwriteWith(byte data) {
 		long length = file.length();
 		byte[] content = new byte[(int) length];
-		for (int i = 0; i < content.length; i++) {
+		for (int i = 0; i < content.length; ++i)
 			content[i] = data;
-		}
 
 		FileOutputStream out;
 
@@ -197,11 +178,11 @@ public class FileUtils {
 
 		boolean worked = true;
 
-		if (file.isDirectory()) {
+		if (file.isDirectory())
 			for (File c : file.listFiles())
 				if (!new FileUtils(c).secureDelete())
 					worked = false;
-		} else {
+				else {
 			byte[] b = new byte[1];
 			rand.nextBytes(b);
 			if (!shred(1))
@@ -231,9 +212,8 @@ public class FileUtils {
 		byte[] b = new byte[1];
 
 		FileOutputStream out = new FileOutputStream(file);
-		for (long i = 0; i < length; i++) {
+		for (long i = 0; i < length; ++i)
 			out.write(b);
-		}
 		out.close();
 
 		return true;

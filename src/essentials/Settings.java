@@ -41,54 +41,43 @@ public class Settings {
 
 	public Settings(File file, Properties defaultValues, boolean useXML,
 			SimpleLog log) {
-		if (defaultValues == null)
-			this.defaultValues = new Properties();
-		else
-			this.defaultValues = defaultValues;
+		this.defaultValues = defaultValues != null ? defaultValues : new Properties();
 		this.file = file;
 		this.useXML = useXML;
-		if (log == null)
-			this.log = new SimpleLog();
-		else
-			this.log = log;
+		this.log = log != null ? log : new SimpleLog();
 
 		filename = file.getName();
 		log.debug("Reading " + filename);
 		try {
-			if (file.canRead()) {
-
-				try {
-					if (useXML)
-						settings.loadFromXML(new FileInputStream(file));
-					else
-						settings.load(new FileInputStream(file));
-					log.info("Loaded " + filename);
-				} catch (InvalidPropertiesFormatException e) {
-					log.error("Invalid properties format in '" + filename
-							+ "' Resetting '" + filename
-							+ "' to default values.");
-					settings = defaultValues;
-					if (useXML)
-						settings.storeToXML(new FileOutputStream(file), null);
-					else
-						settings.store(new FileOutputStream(file), null);
-				}
-
-			} else {
+			if (!file.canRead())
 				if (file.exists()) {
 					log.fatal("Can't read '" + filename + "'");
 					System.exit(1);
 				} else {
-					log.warning("'" + filename
-							+ "' doesn't exist! Using default values");
+					log.warning("'" + filename + "' doesn't exist! Using default values");
 					file.createNewFile();
 					settings = defaultValues;
-					if (useXML)
-						settings.storeToXML(new FileOutputStream(file), null);
-					else
+					if (!useXML)
 						settings.store(new FileOutputStream(file), null);
+					else
+						settings.storeToXML(new FileOutputStream(file), null);
 				}
-			}
+			else
+				try {
+					if (!useXML)
+						settings.load(new FileInputStream(file));
+					else
+						settings.loadFromXML(new FileInputStream(file));
+					log.info("Loaded " + filename);
+				} catch (InvalidPropertiesFormatException e) {
+					log.error("Invalid properties format in '" + filename + "' Resetting '" + filename
+							+ "' to default values.");
+					settings = defaultValues;
+					if (!useXML)
+						settings.store(new FileOutputStream(file), null);
+					else
+						settings.storeToXML(new FileOutputStream(file), null);
+				}
 
 		} catch (FileNotFoundException e) {
 
@@ -127,10 +116,10 @@ public class Settings {
 	public void setSetting(String key, String value) {
 		settings.setProperty(key, value);
 		try {
-			if (useXML)
-				settings.storeToXML(new FileOutputStream(this.file), null);
-			else
+			if (!useXML)
 				settings.store(new FileOutputStream(this.file), null);
+			else
+				settings.storeToXML(new FileOutputStream(this.file), null);
 		} catch (IOException e) {
 			log.fatal("IOException while saving\n" + e.getMessage());
 			log.logStackTrace(e);
@@ -168,21 +157,17 @@ public class Settings {
 	 */
 	public boolean setComment(String comment, boolean updateNow) {
 		this.comment = comment;
-		if (updateNow) {
-
+		if (updateNow)
 			try {
-				if (useXML)
-					settings.storeToXML(new FileOutputStream(this.file),
-							comment);
-				else
+				if (!useXML)
 					settings.store(new FileOutputStream(this.file), comment);
+				else
+					settings.storeToXML(new FileOutputStream(this.file), comment);
 			} catch (IOException e) {
 				log.fatal("IOException while saving\n" + e.getMessage());
 				log.logStackTrace(e);
 				return false;
 			}
-
-		}
 		return true;
 	}
 
@@ -200,11 +185,11 @@ public class Settings {
 	 * Set the properties object. It will be synced to the file if you use
 	 * writeToFile();
 	 * 
-	 * @param props
+	 * @param p
 	 *            The properties object ot be synced
 	 */
-	public void setProperties(Properties props) {
-		this.settings = props;
+	public void setProperties(Properties p) {
+		this.settings = p;
 	}
 
 	/**
@@ -214,10 +199,10 @@ public class Settings {
 	 */
 	public boolean writeToFile() {
 		try {
-			if (useXML)
-				settings.storeToXML(new FileOutputStream(this.file), comment);
-			else
+			if (!useXML)
 				settings.store(new FileOutputStream(this.file), comment);
+			else
+				settings.storeToXML(new FileOutputStream(this.file), comment);
 		} catch (IOException e) {
 			log.fatal("IOException while saving\n" + e.getMessage());
 			log.logStackTrace(e);
@@ -232,40 +217,35 @@ public class Settings {
 	public void reload() {
 		log.debug("Reloading " + filename);
 		try {
-			if (file.canRead()) {
-
-				try {
-					if (useXML)
-						settings.loadFromXML(new FileInputStream(file));
-					else
-						settings.load(new FileInputStream(file));
-					log.info("Reloaded " + filename);
-				} catch (InvalidPropertiesFormatException e) {
-					log.error("Invalid properties format in '" + filename
-							+ "' Resetting '" + filename
-							+ "' to default values.");
-					settings = defaultValues;
-					if (useXML)
-						settings.storeToXML(new FileOutputStream(file), null);
-					else
-						settings.store(new FileOutputStream(file), null);
-				}
-
-			} else {
+			if (!file.canRead())
 				if (file.exists()) {
 					log.fatal("Can't read '" + filename + "'");
 					System.exit(1);
 				} else {
-					log.warning("'" + filename
-							+ "' doesn't exist! Using default values");
+					log.warning("'" + filename + "' doesn't exist! Using default values");
 					file.createNewFile();
 					settings = defaultValues;
-					if (useXML)
-						settings.storeToXML(new FileOutputStream(file), null);
-					else
+					if (!useXML)
 						settings.store(new FileOutputStream(file), null);
+					else
+						settings.storeToXML(new FileOutputStream(file), null);
 				}
-			}
+			else
+				try {
+					if (!useXML)
+						settings.load(new FileInputStream(file));
+					else
+						settings.loadFromXML(new FileInputStream(file));
+					log.info("Reloaded " + filename);
+				} catch (InvalidPropertiesFormatException e) {
+					log.error("Invalid properties format in '" + filename + "' Resetting '" + filename
+							+ "' to default values.");
+					settings = defaultValues;
+					if (!useXML)
+						settings.store(new FileOutputStream(file), null);
+					else
+						settings.storeToXML(new FileOutputStream(file), null);
+				}
 
 		} catch (FileNotFoundException e) {
 
@@ -291,10 +271,9 @@ public class Settings {
 	 *         object
 	 */
 	public boolean containsKeys(String[] keys) {
-		for (String string : keys) {
+		for (String string : keys)
 			if (!settings.containsKey(string))
 				return false;
-		}
 		return true;
 	}
 
@@ -307,9 +286,7 @@ public class Settings {
 	 * @return <code>true</code> if the key is present
 	 */
 	public boolean containsKey(String key) {
-		if (!settings.containsKey(key))
-			return false;
-		return true;
+		return settings.containsKey(key);
 	}
 
 }

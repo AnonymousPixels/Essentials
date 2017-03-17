@@ -21,7 +21,7 @@ public class SimpleLog {
 	static File file;
 	static boolean timestamp;
 	SimpleDateFormat dateFormat;
-	boolean dummy = false;
+	boolean dummy;
 
 	/**
 	 * Constructor of 'Log' class, which creates the log file
@@ -39,11 +39,7 @@ public class SimpleLog {
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 		SimpleLog.timestamp = useTimestamp;
 
-		if (!useSameFile)
-			SimpleLog.file = new File(file.getPath() + "_"
-					+ dateFormat.format(time) + ".txt");
-		else
-			SimpleLog.file = file;
+		SimpleLog.file = useSameFile ? file : new File(file.getPath() + "_" + dateFormat.format(time) + ".txt");
 
 		if (!file.exists())
 			try {
@@ -196,18 +192,17 @@ public class SimpleLog {
 	/**
 	 * Add a new StackTrace to the logfile
 	 * 
-	 * @param e
+	 * @param x
 	 *            The Exception, whose StackTrace should be logged
 	 * @return False, if an IOException has occurred
 	 */
-	public boolean logStackTrace(Exception e) {
+	public boolean logStackTrace(Exception x) {
 		if (dummy) {
-			e.printStackTrace();
+			x.printStackTrace();
 			return true;
 		}
 		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		e.printStackTrace(pw);
+		x.printStackTrace(new PrintWriter(sw));
 		try {
 			Timestamp time = new Timestamp(System.currentTimeMillis());
 
@@ -216,7 +211,7 @@ public class SimpleLog {
 				out.append((CharSequence) dateFormat.format(time) + " ");
 				System.out.print(dateFormat.format(time) + "  ");
 			}
-			String s = sw.toString();
+			String s = sw + "";
 			out.append(s + "\n");
 			out.close();
 			System.err.println(s);
@@ -317,7 +312,7 @@ public class SimpleLog {
 
 			Timestamp time = new Timestamp(System.currentTimeMillis());
 			FileWriter out = new FileWriter(file, true);
-			for (int i = 0; i < text.length(); i++) {
+			for (int i = 0; i < text.length(); ++i) {
 				out.append("=");
 				System.out.print("=");
 			}
@@ -327,8 +322,7 @@ public class SimpleLog {
 
 				String text2 = "";
 
-				for (int i = 0; i < (text.length() - (((CharSequence) dateFormat
-						.format(time)).length())); i += 2)
+				for (int i = 0; i < (text.length() - ((CharSequence) dateFormat.format(time)).length()); i += 2)
 					text2 += " ";
 
 				text2 += (CharSequence) dateFormat.format(time);
@@ -336,7 +330,7 @@ public class SimpleLog {
 				out.append(text2 + "\n");
 				System.out.println(text2);
 			}
-			for (int i = 0; i < text.length(); i++) {
+			for (int i = 0; i < text.length(); ++i) {
 				out.append("=");
 				System.out.print("=");
 			}
