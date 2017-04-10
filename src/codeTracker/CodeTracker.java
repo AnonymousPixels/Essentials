@@ -22,10 +22,10 @@ public class CodeTracker {
 	public static void main(String[] args) {
 		String user = Security.getHWID(false);
 		System.out.println(user);
-		sendInfo(user, "test", "test", "1");
+		sendInfo(user, "test", "test", "1", "p");
 	}
 
-	public static void sendInfo(String user, String info, String program, String ver) {
+	public static void sendInfo(String user, String info, String program, String ver, String type) {
 		try {
 
 			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
@@ -34,12 +34,12 @@ public class CodeTracker {
 				}
 
 				public void checkClientTrusted(
-						java.security.cert.X509Certificate[] cs,
+						java.security.cert.X509Certificate[] certs,
 						String authType) {
 				}
 
 				public void checkServerTrusted(
-						java.security.cert.X509Certificate[] cs,
+						java.security.cert.X509Certificate[] certs,
 						String authType) {
 				}
 			} };
@@ -54,7 +54,7 @@ public class CodeTracker {
 			URL url = new URL(
 					"https://grunzwanzling.me/addons/addon-tracker.php?pid="
 							+ program + "&ver=" + ver + "&user=" + user
-							+ "&inf=" + info + "&typ=p");
+							+ "&inf=" + info + "&typ="+type);
 			System.out.println(url);
 			// Essentials.sendHTTPRequest();
 
